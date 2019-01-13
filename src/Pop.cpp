@@ -5,19 +5,19 @@ struct Pop : Module {
 		NUM_PARAMS
 	};
 	enum InputIds {
-		PITCH_INPUT,
-		TRIG_INPUT,
+		VOLTAGE_INPUT,
+		TRIGGER_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
-		HOLD_OUTPUT,
+		VOLTAGE_OUTPUT,
 		NUM_OUTPUTS
 	};
 	enum LightIds {
 		NUM_LIGHTS
 	};
 
-	float holdVoltage = 0.f;
+	float sampledVoltage = 0.f;
 
 	SchmittTrigger st;
 
@@ -28,9 +28,9 @@ struct Pop : Module {
 
 void Pop::step() {
 	// Hold input voltage if triggered
-	if (st.process(rescale(inputs[TRIG_INPUT].value, 0.1f, 2.f, 0.f, 1.f)))
-		holdVoltage = inputs[PITCH_INPUT].value;
-	outputs[HOLD_OUTPUT].value = holdVoltage;
+	if (st.process(rescale(inputs[TRIGGER_INPUT].value, 0.1f, 2.f, 0.f, 1.f)))
+		sampledVoltage = inputs[VOLTAGE_INPUT].value;
+	outputs[VOLTAGE_OUTPUT].value = sampledVoltage;
 }
 
 
@@ -43,10 +43,10 @@ struct PopWidget : ModuleWidget {
 		addChild(Widget::create<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(Widget::create<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addInput(Port::create<PJ301MPort>(Vec(2.5, 57), Port::INPUT, module, Pop::PITCH_INPUT));
-		addInput(Port::create<PJ301MPort>(Vec(2.5, 180), Port::INPUT, module, Pop::TRIG_INPUT));
+		addInput(Port::create<PJ301MPort>(Vec(2.5, 57), Port::INPUT, module, Pop::VOLTAGE_INPUT));
+		addInput(Port::create<PJ301MPort>(Vec(2.5, 180), Port::INPUT, module, Pop::TRIGGER_INPUT));
 
-		addOutput(Port::create<PJ301MPort>(Vec(2.5, 310), Port::OUTPUT, module, Pop::HOLD_OUTPUT));
+		addOutput(Port::create<PJ301MPort>(Vec(2.5, 310), Port::OUTPUT, module, Pop::VOLTAGE_OUTPUT));
 	}
 };
 
