@@ -1,9 +1,9 @@
 #include "ChortlingHamsterModules.hpp"
 
-Plugin *plugin;
+Plugin *pluginInstance;
 
 void init(Plugin *p) {
-	plugin = p;
+	pluginInstance = p;
 	p->slug = TOSTRING(SLUG);
 	p->version = TOSTRING(VERSION);
 	p->addModel(modelPop);
