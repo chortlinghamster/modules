@@ -21,7 +21,7 @@ Here's a screen shot of a VCV Rack patch using Pop _to do just that_! Cripes!
 
 ![Example Pop patch](images/pop-example.png)
 
-You can find that patch in the folder `ChortlingHamsterModules/res/patches` as a file called `Pop-Example.vcv`.
+You can find that patch in the folder `/res/patches` as a file called `Pop-Example.vcv`.
 
 ### Disappointment! This is serious basic!
 
