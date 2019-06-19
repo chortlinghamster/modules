@@ -1,189 +1,285 @@
 {
-  "version": "0.6.1",
+  "version": "1.0.0",
   "modules": [
     {
       "plugin": "Core",
-      "version": "0.6.1",
+      "version": "1.0.0",
       "model": "AudioInterface",
-      "pos": [
-        36,
-        0
-      ],
       "params": [],
       "data": {
         "audio": {
           "driver": 5,
-          "deviceName": "Apple Inc.: Built-in Output",
+          "deviceName": "Apple Inc.: External Headphones",
           "offset": 0,
           "maxChannels": 8,
           "sampleRate": 44100,
           "blockSize": 256
         }
-      }
-    },
-    {
-      "plugin": "Fundamental",
-      "version": "0.6.0",
-      "model": "VCO",
+      },
+      "id": 0,
       "pos": [
-        25,
+        56,
         0
-      ],
-      "params": [
-        {
-          "paramId": 0,
-          "value": 1.0
-        },
-        {
-          "paramId": 1,
-          "value": 1.0
-        },
-        {
-          "paramId": 2,
-          "value": 0.0
-        },
-        {
-          "paramId": 3,
-          "value": 0.0
-        },
-        {
-          "paramId": 5,
-          "value": 0.5
-        },
-        {
-          "paramId": 4,
-          "value": 0.0
-        },
-        {
-          "paramId": 6,
-          "value": 0.0
-        }
       ]
     },
     {
       "plugin": "Fundamental",
-      "version": "0.6.0",
-      "model": "LFO",
-      "pos": [
-        0,
-        0
-      ],
+      "version": "1.0.0",
+      "model": "VCO",
       "params": [
         {
-          "paramId": 0,
+          "id": 0,
           "value": 1.0
         },
         {
-          "paramId": 1,
+          "id": 1,
           "value": 1.0
         },
         {
-          "paramId": 2,
+          "id": 2,
+          "value": 0.0
+        },
+        {
+          "id": 3,
+          "value": 0.0
+        },
+        {
+          "id": 4,
+          "value": 0.0
+        },
+        {
+          "id": 5,
+          "value": 0.5
+        },
+        {
+          "id": 6,
+          "value": 0.0
+        }
+      ],
+      "id": 1,
+      "pos": [
+        34,
+        0
+      ]
+    },
+    {
+      "plugin": "Fundamental",
+      "version": "1.0.0",
+      "model": "LFO",
+      "params": [
+        {
+          "id": 0,
+          "value": 0.0
+        },
+        {
+          "id": 1,
+          "value": 1.0
+        },
+        {
+          "id": 2,
           "value": 2.90600038
         },
         {
-          "paramId": 3,
+          "id": 3,
           "value": 0.0
         },
         {
-          "paramId": 5,
+          "id": 4,
+          "value": 0.0
+        },
+        {
+          "id": 5,
           "value": 0.5
         },
         {
-          "paramId": 4,
-          "value": 0.0
-        },
-        {
-          "paramId": 6,
+          "id": 6,
           "value": 0.0
         }
+      ],
+      "id": 2,
+      "pos": [
+        0,
+        0
       ]
     },
     {
       "plugin": "Fundamental",
-      "version": "0.6.0",
+      "version": "1.0.0",
       "model": "LFO",
-      "pos": [
-        11,
-        0
-      ],
       "params": [
         {
-          "paramId": 0,
+          "id": 0,
           "value": 1.0
         },
         {
-          "paramId": 1,
+          "id": 1,
           "value": 1.0
         },
         {
-          "paramId": 2,
-          "value": 2.9571867
+          "id": 2,
+          "value": 2.0661869
         },
         {
-          "paramId": 3,
+          "id": 3,
           "value": 0.0
         },
         {
-          "paramId": 5,
+          "id": 4,
+          "value": 0.0
+        },
+        {
+          "id": 5,
           "value": 0.5
         },
         {
-          "paramId": 4,
-          "value": 0.0
-        },
-        {
-          "paramId": 6,
+          "id": 6,
           "value": 0.0
         }
+      ],
+      "id": 3,
+      "pos": [
+        11,
+        0
       ]
     },
     {
       "plugin": "ChortlingHamsterModules",
-      "version": "0.6.0",
+      "version": "1.0.0",
       "model": "Pop",
+      "params": [],
+      "id": 4,
       "pos": [
         22,
         0
+      ]
+    },
+    {
+      "plugin": "Fundamental",
+      "version": "1.0.0",
+      "model": "VCMixer",
+      "params": [
+        {
+          "id": 0,
+          "value": 0.251188636
+        },
+        {
+          "id": 1,
+          "value": 1.0
+        },
+        {
+          "id": 2,
+          "value": 1.0
+        },
+        {
+          "id": 3,
+          "value": 1.0
+        },
+        {
+          "id": 4,
+          "value": 1.0
+        }
       ],
-      "params": []
+      "id": 5,
+      "pos": [
+        45,
+        0
+      ]
+    },
+    {
+      "plugin": "Fundamental",
+      "version": "1.0.0",
+      "model": "8vert",
+      "params": [
+        {
+          "id": 0,
+          "value": 0.230000004
+        },
+        {
+          "id": 1,
+          "value": 0.0
+        },
+        {
+          "id": 2,
+          "value": 0.0
+        },
+        {
+          "id": 3,
+          "value": 0.0
+        },
+        {
+          "id": 4,
+          "value": 0.0
+        },
+        {
+          "id": 5,
+          "value": 0.0
+        },
+        {
+          "id": 6,
+          "value": 0.0
+        },
+        {
+          "id": 7,
+          "value": 0.0
+        }
+      ],
+      "id": 6,
+      "pos": [
+        25,
+        0
+      ]
     }
   ],
-  "wires": [
+  "id": 6,
+  "cables": [
     {
-      "color": "#c91847",
-      "outputModuleId": 1,
-      "outputId": 1,
-      "inputModuleId": 0,
-      "inputId": 0
-    },
-    {
-      "color": "#0c8e15",
-      "outputModuleId": 1,
-      "outputId": 1,
-      "inputModuleId": 0,
-      "inputId": 1
-    },
-    {
-      "color": "#0c8e15",
       "outputModuleId": 2,
       "outputId": 0,
       "inputModuleId": 4,
-      "inputId": 0
+      "inputId": 0,
+      "color": "#0c8e15"
     },
     {
-      "color": "#c9b70e",
       "outputModuleId": 3,
       "outputId": 3,
       "inputModuleId": 4,
-      "inputId": 1
+      "inputId": 1,
+      "color": "#c9b70e"
     },
     {
-      "color": "#c9b70e",
+      "outputModuleId": 1,
+      "outputId": 1,
+      "inputModuleId": 5,
+      "inputId": 1,
+      "color": "#c9b70e"
+    },
+    {
+      "outputModuleId": 5,
+      "outputId": 0,
+      "inputModuleId": 0,
+      "inputId": 1,
+      "color": "#0c8e15"
+    },
+    {
+      "outputModuleId": 5,
+      "outputId": 0,
+      "inputModuleId": 0,
+      "inputId": 0,
+      "color": "#c91847"
+    },
+    {
       "outputModuleId": 4,
       "outputId": 0,
+      "inputModuleId": 6,
+      "inputId": 0,
+      "color": "#c9b70e"
+    },
+    {
+      "outputModuleId": 6,
+      "outputId": 0,
       "inputModuleId": 1,
-      "inputId": 0
+      "inputId": 0,
+      "color": "#0986ad"
     }
   ]
 }
