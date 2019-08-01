@@ -1,30 +1,30 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.3",
   "modules": [
     {
+      "id": 0,
       "plugin": "Core",
-      "version": "1.0.0",
+      "version": "1.1.3",
       "model": "AudioInterface",
       "params": [],
       "data": {
         "audio": {
           "driver": 5,
-          "deviceName": "Apple Inc.: External Headphones",
           "offset": 0,
           "maxChannels": 8,
           "sampleRate": 44100,
           "blockSize": 256
         }
       },
-      "id": 0,
       "pos": [
         56,
         0
       ]
     },
     {
+      "id": 1,
       "plugin": "Fundamental",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "model": "VCO",
       "params": [
         {
@@ -56,15 +56,15 @@
           "value": 0.0
         }
       ],
-      "id": 1,
       "pos": [
         34,
         0
       ]
     },
     {
+      "id": 2,
       "plugin": "Fundamental",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "model": "LFO",
       "params": [
         {
@@ -96,15 +96,15 @@
           "value": 0.0
         }
       ],
-      "id": 2,
       "pos": [
         0,
         0
       ]
     },
     {
+      "id": 3,
       "plugin": "Fundamental",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "model": "LFO",
       "params": [
         {
@@ -136,26 +136,26 @@
           "value": 0.0
         }
       ],
-      "id": 3,
       "pos": [
         11,
         0
       ]
     },
     {
+      "id": 4,
       "plugin": "ChortlingHamsterModules",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "model": "Pop",
       "params": [],
-      "id": 4,
       "pos": [
         22,
         0
       ]
     },
     {
+      "id": 5,
       "plugin": "Fundamental",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "model": "VCMixer",
       "params": [
         {
@@ -179,15 +179,15 @@
           "value": 1.0
         }
       ],
-      "id": 5,
       "pos": [
         45,
         0
       ]
     },
     {
+      "id": 6,
       "plugin": "Fundamental",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "model": "8vert",
       "params": [
         {
@@ -223,16 +223,15 @@
           "value": 0.0
         }
       ],
-      "id": 6,
       "pos": [
         25,
         0
       ]
     }
   ],
-  "id": 6,
   "cables": [
     {
+      "id": 3,
       "outputModuleId": 2,
       "outputId": 0,
       "inputModuleId": 4,
@@ -240,6 +239,7 @@
       "color": "#0c8e15"
     },
     {
+      "id": 4,
       "outputModuleId": 3,
       "outputId": 3,
       "inputModuleId": 4,
@@ -247,6 +247,7 @@
       "color": "#c9b70e"
     },
     {
+      "id": 5,
       "outputModuleId": 1,
       "outputId": 1,
       "inputModuleId": 5,
@@ -254,6 +255,7 @@
       "color": "#c9b70e"
     },
     {
+      "id": 6,
       "outputModuleId": 5,
       "outputId": 0,
       "inputModuleId": 0,
@@ -261,6 +263,7 @@
       "color": "#0c8e15"
     },
     {
+      "id": 7,
       "outputModuleId": 5,
       "outputId": 0,
       "inputModuleId": 0,
@@ -268,6 +271,7 @@
       "color": "#c91847"
     },
     {
+      "id": 8,
       "outputModuleId": 4,
       "outputId": 0,
       "inputModuleId": 6,
@@ -275,6 +279,7 @@
       "color": "#c9b70e"
     },
     {
+      "id": 9,
       "outputModuleId": 6,
       "outputId": 0,
       "inputModuleId": 1,

@@ -25,7 +25,7 @@ You can find that patch in the folder `/res/patches` as a file called `Pop-Examp
 
 ### Disappointment! This is serious basic!
 
-Yes. It is. I totally agree. I only made it to help me learn how to get started making modules for VCV Rack. It's just a sample and hold module which is mostly made up of code from the [VCV Rack Template](https://github.com/VCVRack/Template), with about six lines of codes done by me.
+Yes. It is. I totally agree. I only made it to help me learn how to get started making modules for VCV Rack.
 
 That said…
 

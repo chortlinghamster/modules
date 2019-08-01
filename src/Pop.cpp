@@ -1,5 +1,6 @@
 #include "ChortlingHamsterModules.hpp"
 
+
 struct Pop : Module {
 	enum ParamIds {
 		NUM_PARAMS
@@ -22,17 +23,16 @@ struct Pop : Module {
 	dsp::SchmittTrigger st;
 
 	Pop() {
-		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);}
-	void process(const ProcessArgs &args) override;
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+	}
+
+	void process(const ProcessArgs &args) override {
+		// Hold input voltage if triggered
+		if (st.process(rescale(inputs[TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)))
+			sampledVoltage = inputs[VOLTAGE_INPUT].getVoltage();
+		outputs[VOLTAGE_OUTPUT].setVoltage(sampledVoltage);
+	}
 };
-
-
-void Pop::process(const ProcessArgs &args) {
-	// Hold input voltage if triggered
-	if (st.process(rescale(inputs[TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)))
-		sampledVoltage = inputs[VOLTAGE_INPUT].getVoltage();
-	outputs[VOLTAGE_OUTPUT].setVoltage(sampledVoltage);
-}
 
 
 struct PopWidget : ModuleWidget {
@@ -45,11 +45,12 @@ struct PopWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addInput(createInput<PJ301MPort>(Vec(2.5, 57), module, Pop::VOLTAGE_INPUT));
-		addInput(createInput<PJ301MPort>(Vec(2.5, 180), module, Pop::TRIGGER_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(5.08, 22.874)), module, Pop::VOLTAGE_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(5.08, 64.382)), module, Pop::TRIGGER_INPUT));
 
-		addOutput(createOutput<PJ301MPort>(Vec(2.5, 310), module, Pop::VOLTAGE_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(5.08, 108.931)), module, Pop::VOLTAGE_OUTPUT));
 	}
 };
+
 
 Model *modelPop = createModel<Pop, PopWidget>("Pop");
