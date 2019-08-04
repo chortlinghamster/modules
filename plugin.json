@@ -19,6 +19,14 @@
       "tags": [
         "Sample and hold"
       ]
+    },
+    {
+      "slug": "Bitwise",
+      "name": "Bitwise",
+      "description": "Bitwise pattern selector",
+      "tags": [
+        "Utility"
+      ]
     }
   ]
 }
