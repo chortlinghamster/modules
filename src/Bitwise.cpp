@@ -204,7 +204,7 @@ struct Bitwise : Module {
 							);
 		}
 
-		// Set pattern lights.
+		// Set pattern indicator lights.
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 4; j++) {
 				float brightness = 0.f;
@@ -213,7 +213,7 @@ struct Bitwise : Module {
 					if ((int)rowSelection == i) {
 						brightness = 1.f;
 					} else {
-						brightness = 0.5f;
+						brightness = 0.3f;
 					}
 				} else {
 					brightness = 0.f;
@@ -249,23 +249,6 @@ struct Bitwise : Module {
 
 			lights[4 + i].setBrightness((pulseOutput[4 + i].process(args.sampleTime)) ? 1.f : 0.f);
 
-			// Set pattern lights.
-			// @todo Hungry!
-
-			// Draw the pattern in lights
-			// for (int j = 0; j < 4; j++) {
-			// 	// currentPatternLight = 8 + (j * numberOfColumns) + i;
-			// 	// currentPatternLight = 8 + j;
-			// 	currentPatternLight = 8;
-			// // 	// // float currentPatternLightBrightness = (isCurrentColumnSelected ? 1.f : (pattern[j][i]? 0.5f : 0.f));
-			// // 	// float currentPatternLightBrightness = (isCurrentColumnSelected) ? 1.f : 0.f;
-			// // 	// lights[currentPatternLight].setBrightness(currentPatternLightBrightness);
-			// 	// PROBLEM
-			// 	// lights[currentPatternLight].setBrightness(1.f);
-			// 	// lights[8 + j].setBrightness(1.f);
-			// 	lights[currentPatternLight].setBrightness(1.f);
-			// }
-
 		} // End of do stuff on the columns for loop.
 
 	} // End of process() function.
@@ -277,114 +260,112 @@ struct BitwiseWidget : ModuleWidget {
 		setModule(module);
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/Bitwise.svg")));
 
-		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
-		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH * 2, 0)));
+		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH * 2, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(21.008, 33.475)), module, Bitwise::ROW_SELECT_PARAM));
-		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(50.112, 33.475)), module, Bitwise::PATTERN_SELECT_PARAM));
+		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(17.833, 33.475)), module, Bitwise::ROW_SELECT_PARAM));
+		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(53.287, 33.475)), module, Bitwise::PATTERN_SELECT_PARAM));
 		addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(6.456, 46.275)), module, Bitwise::ROW_SELECT_CV_ATN_PARAM));
 		addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(64.664, 46.275)), module, Bitwise::PATTERN_SELECT_CV_ATN_PARAM));
 
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 33.475)), module, Bitwise::ROW_SELECT_CV_INPUT));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 33.475)), module, Bitwise::PATTERN_SELECT_CV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 79.675)), module, Bitwise::INPUT1_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 79.675)), module, Bitwise::INPUT2_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 79.675)), module, Bitwise::INPUT3_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 79.675)), module, Bitwise::INPUT4_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 91.925)), module, Bitwise::TRIGGER1_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 91.925)), module, Bitwise::TRIGGER2_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(35.56, 91.925)), module, Bitwise::TRIGGER_ALL_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 91.925)), module, Bitwise::TRIGGER3_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 91.925)), module, Bitwise::TRIGGER4_INPUT));
 
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 79.014)), module, Bitwise::INPUT1_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 79.014)), module, Bitwise::INPUT2_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 79.014)), module, Bitwise::INPUT3_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 79.014)), module, Bitwise::INPUT4_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 89.544)), module, Bitwise::TRIGGER1_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 89.544)), module, Bitwise::TRIGGER2_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(35.56, 89.544)), module, Bitwise::TRIGGER_ALL_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 89.544)), module, Bitwise::TRIGGER3_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 89.544)), module, Bitwise::TRIGGER4_INPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 104.176)), module, Bitwise::OUT1_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 104.176)), module, Bitwise::OUT2_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35.56, 104.176)), module, Bitwise::POLYPHONIC_OUT_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 104.176)), module, Bitwise::OUT3_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 104.176)), module, Bitwise::OUT4_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 116.426)), module, Bitwise::PULSE_OUT1_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 116.426)), module, Bitwise::PULSE_OUT2_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 116.426)), module, Bitwise::PULSE_OUT3_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 116.426)), module, Bitwise::PULSE_OUT4_OUTPUT));
 
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 100.075)), module, Bitwise::OUT1_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 100.075)), module, Bitwise::OUT2_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35.56, 100.075)), module, Bitwise::POLYPHONIC_OUT_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 100.075)), module, Bitwise::OUT3_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 100.075)), module, Bitwise::OUT4_OUTPUT));
-
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 110.605)), module, Bitwise::PULSE_OUT1_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 110.605)), module, Bitwise::PULSE_OUT2_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 110.605)), module, Bitwise::PULSE_OUT3_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 110.605)), module, Bitwise::PULSE_OUT4_OUTPUT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT_01_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT_01_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT_01_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT_01_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 12.216)), module, Bitwise::PATTERN_INDICATOR_LIGHT_02_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 12.216)), module, Bitwise::PATTERN_INDICATOR_LIGHT_02_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 12.216)), module, Bitwise::PATTERN_INDICATOR_LIGHT_02_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 12.216)), module, Bitwise::PATTERN_INDICATOR_LIGHT_02_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 15.487)), module, Bitwise::PATTERN_INDICATOR_LIGHT_03_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 15.487)), module, Bitwise::PATTERN_INDICATOR_LIGHT_03_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 15.487)), module, Bitwise::PATTERN_INDICATOR_LIGHT_03_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 15.487)), module, Bitwise::PATTERN_INDICATOR_LIGHT_03_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 18.757)), module, Bitwise::PATTERN_INDICATOR_LIGHT_04_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 18.757)), module, Bitwise::PATTERN_INDICATOR_LIGHT_04_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 18.757)), module, Bitwise::PATTERN_INDICATOR_LIGHT_04_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 18.757)), module, Bitwise::PATTERN_INDICATOR_LIGHT_04_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 22.028)), module, Bitwise::PATTERN_INDICATOR_LIGHT_05_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 22.028)), module, Bitwise::PATTERN_INDICATOR_LIGHT_05_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 22.028)), module, Bitwise::PATTERN_INDICATOR_LIGHT_05_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 22.028)), module, Bitwise::PATTERN_INDICATOR_LIGHT_05_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 25.298)), module, Bitwise::PATTERN_INDICATOR_LIGHT_06_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 25.298)), module, Bitwise::PATTERN_INDICATOR_LIGHT_06_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 25.298)), module, Bitwise::PATTERN_INDICATOR_LIGHT_06_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 25.298)), module, Bitwise::PATTERN_INDICATOR_LIGHT_06_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 28.569)), module, Bitwise::PATTERN_INDICATOR_LIGHT_07_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 28.569)), module, Bitwise::PATTERN_INDICATOR_LIGHT_07_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 28.569)), module, Bitwise::PATTERN_INDICATOR_LIGHT_07_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 28.569)), module, Bitwise::PATTERN_INDICATOR_LIGHT_07_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 31.84)), module, Bitwise::PATTERN_INDICATOR_LIGHT_08_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 31.84)), module, Bitwise::PATTERN_INDICATOR_LIGHT_08_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 31.84)), module, Bitwise::PATTERN_INDICATOR_LIGHT_08_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 31.84)), module, Bitwise::PATTERN_INDICATOR_LIGHT_08_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 35.11)), module, Bitwise::PATTERN_INDICATOR_LIGHT_09_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 35.11)), module, Bitwise::PATTERN_INDICATOR_LIGHT_09_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 35.11)), module, Bitwise::PATTERN_INDICATOR_LIGHT_09_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 35.11)), module, Bitwise::PATTERN_INDICATOR_LIGHT_09_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 38.381)), module, Bitwise::PATTERN_INDICATOR_LIGHT_10_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 38.381)), module, Bitwise::PATTERN_INDICATOR_LIGHT_10_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 38.381)), module, Bitwise::PATTERN_INDICATOR_LIGHT_10_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 38.381)), module, Bitwise::PATTERN_INDICATOR_LIGHT_10_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 41.651)), module, Bitwise::PATTERN_INDICATOR_LIGHT_11_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 41.651)), module, Bitwise::PATTERN_INDICATOR_LIGHT_11_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 41.651)), module, Bitwise::PATTERN_INDICATOR_LIGHT_11_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 41.651)), module, Bitwise::PATTERN_INDICATOR_LIGHT_11_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 44.922)), module, Bitwise::PATTERN_INDICATOR_LIGHT_12_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 44.922)), module, Bitwise::PATTERN_INDICATOR_LIGHT_12_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 44.922)), module, Bitwise::PATTERN_INDICATOR_LIGHT_12_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 44.922)), module, Bitwise::PATTERN_INDICATOR_LIGHT_12_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 48.192)), module, Bitwise::PATTERN_INDICATOR_LIGHT_13_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 48.192)), module, Bitwise::PATTERN_INDICATOR_LIGHT_13_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 48.192)), module, Bitwise::PATTERN_INDICATOR_LIGHT_13_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 48.192)), module, Bitwise::PATTERN_INDICATOR_LIGHT_13_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 51.463)), module, Bitwise::PATTERN_INDICATOR_LIGHT_14_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 51.463)), module, Bitwise::PATTERN_INDICATOR_LIGHT_14_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 51.463)), module, Bitwise::PATTERN_INDICATOR_LIGHT_14_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 51.463)), module, Bitwise::PATTERN_INDICATOR_LIGHT_14_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 54.733)), module, Bitwise::PATTERN_INDICATOR_LIGHT_15_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 54.733)), module, Bitwise::PATTERN_INDICATOR_LIGHT_15_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 54.733)), module, Bitwise::PATTERN_INDICATOR_LIGHT_15_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 54.733)), module, Bitwise::PATTERN_INDICATOR_LIGHT_15_4_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 58.004)), module, Bitwise::PATTERN_INDICATOR_LIGHT_16_1_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 58.004)), module, Bitwise::PATTERN_INDICATOR_LIGHT_16_2_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 58.004)), module, Bitwise::PATTERN_INDICATOR_LIGHT_16_3_LIGHT));
+		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 58.004)), module, Bitwise::PATTERN_INDICATOR_LIGHT_16_4_LIGHT));
 
 		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(6.456, 68.483)), module, Bitwise::SLOT_ACTIVE_LIGHT1_LIGHT));
 		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(21.008, 68.483)), module, Bitwise::SLOT_ACTIVE_LIGHT2_LIGHT));
 		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(50.112, 68.483)), module, Bitwise::SLOT_ACTIVE_LIGHT3_LIGHT));
 		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(64.664, 68.483)), module, Bitwise::SLOT_ACTIVE_LIGHT4_LIGHT));
 
-		addChild(createLightCentered<TinyLight<BlueLight>>(mm2px(Vec(6.456, 116.211)), module, Bitwise::SLOT_PULSE_LIGHT1_LIGHT));
-		addChild(createLightCentered<TinyLight<BlueLight>>(mm2px(Vec(21.008, 116.211)), module, Bitwise::SLOT_PULSE_LIGHT2_LIGHT));
-		addChild(createLightCentered<TinyLight<BlueLight>>(mm2px(Vec(50.112, 116.211)), module, Bitwise::SLOT_PULSE_LIGHT3_LIGHT));
-		addChild(createLightCentered<TinyLight<BlueLight>>(mm2px(Vec(64.664, 116.211)), module, Bitwise::SLOT_PULSE_LIGHT4_LIGHT));
-
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 9.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_01_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 9.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_01_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 9.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_01_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 9.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_01_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 12.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_02_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 12.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_02_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 12.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_02_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 12.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_02_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 15.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_03_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 15.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_03_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 15.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_03_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 15.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_03_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 19.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_04_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 19.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_04_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 19.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_04_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 19.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_04_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 22.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_05_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 22.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_05_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 22.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_05_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 22.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_05_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 25.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_06_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 25.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_06_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 25.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_06_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 25.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_06_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 28.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_07_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 28.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_07_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 28.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_07_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 28.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_07_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 31.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_08_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 31.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_08_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 31.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_08_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 31.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_08_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 35.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_09_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 35.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_09_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 35.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_09_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 35.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_09_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 38.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_10_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 38.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_10_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 38.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_10_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 38.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_10_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 41.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_11_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 41.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_11_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 41.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_11_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 41.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_11_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 44.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_12_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 44.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_12_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 44.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_12_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 44.675)), module, Bitwise::PATTERN_INDICATOR_LIGHT_12_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 47.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_13_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 47.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_13_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 47.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_13_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 47.875)), module, Bitwise::PATTERN_INDICATOR_LIGHT_13_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 51.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_14_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 51.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_14_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 51.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_14_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 51.075)), module, Bitwise::PATTERN_INDICATOR_LIGHT_14_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 54.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_15_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 54.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_15_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 54.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_15_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 54.275)), module, Bitwise::PATTERN_INDICATOR_LIGHT_15_4_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(31.06, 57.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_16_1_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(34.06, 57.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_16_2_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(37.06, 57.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_16_3_LIGHT));
-		addChild(createLightCentered<TinyLight<YellowLight>>(mm2px(Vec(40.06, 57.475)), module, Bitwise::PATTERN_INDICATOR_LIGHT_16_4_LIGHT));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(6.456, 122.561)), module, Bitwise::SLOT_PULSE_LIGHT1_LIGHT));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(21.008, 122.561)), module, Bitwise::SLOT_PULSE_LIGHT2_LIGHT));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(50.112, 122.561)), module, Bitwise::SLOT_PULSE_LIGHT3_LIGHT));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(64.664, 122.561)), module, Bitwise::SLOT_PULSE_LIGHT4_LIGHT));
 
 	}
 };
