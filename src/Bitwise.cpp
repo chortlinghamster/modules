@@ -112,27 +112,164 @@ struct Bitwise : Module {
 	};
 
 	// Being pedantic. You never know.
+	static const int numberOfPatterns = 8;
 	static const int numberOfRows = 16;
 	static const int numberOfColumns = 4;
 
 	// Test pattern
-	static constexpr int pattern[numberOfRows][numberOfColumns] = {
-		{0, 0, 0, 0},
-		{0, 0, 0, 1},
-		{0, 0, 1, 0},
-		{0, 0, 1, 1},
-		{0, 1, 0, 0},
-		{0, 1, 0, 1},
-		{0, 1, 1, 0},
-		{0, 1, 1, 1},
-		{1, 0, 0, 0},
-		{1, 0, 0, 1},
-		{1, 0, 1, 0},
-		{1, 0, 1, 1},
-		{1, 1, 0, 0},
-		{1, 1, 0, 1},
-		{1, 1, 1, 0},
-		{1, 1, 1, 1}
+	int patterns[numberOfPatterns][numberOfRows][numberOfColumns] = {
+		// 1 Hexed
+		{
+			{0, 0, 0, 0},
+			{0, 0, 0, 1},
+			{0, 0, 1, 0},
+			{0, 0, 1, 1},
+			{0, 1, 0, 0},
+			{0, 1, 0, 1},
+			{0, 1, 1, 0},
+			{0, 1, 1, 1},
+			{1, 0, 0, 0},
+			{1, 0, 0, 1},
+			{1, 0, 1, 0},
+			{1, 0, 1, 1},
+			{1, 1, 0, 0},
+			{1, 1, 0, 1},
+			{1, 1, 1, 0},
+			{1, 1, 1, 1}
+		},
+		// 2 Stairs
+		{
+			{0, 0, 0, 0},
+			{0, 0, 0, 1},
+			{0, 0, 1, 1},
+			{0, 1, 1, 1},
+			{1, 1, 1, 1},
+			{1, 1, 1, 0},
+			{1, 1, 0, 0},
+			{1, 0, 0, 0},
+			{0, 0, 0, 0},
+			{1, 0, 0, 0},
+			{1, 1, 0, 0},
+			{1, 1, 1, 0},
+			{1, 1, 1, 1},
+			{0, 1, 1, 1},
+			{0, 0, 1, 1},
+			{0, 0, 0, 1}
+		},
+		// 3 Snow
+		{
+			{0, 1, 0, 0},
+			{1, 0, 0, 1},
+			{1, 0, 1, 0},
+			{1, 0, 0, 1},
+			{0, 1, 0, 0},
+			{1, 0, 0, 1},
+			{0, 0, 1, 0},
+			{1, 1, 1, 1},
+			{0, 1, 0, 1},
+			{1, 0, 0, 1},
+			{0, 0, 1, 0},
+			{1, 0, 0, 1},
+			{1, 1, 0, 0},
+			{1, 0, 0, 1},
+			{0, 0, 1, 1},
+			{1, 0, 0, 1}
+		},
+		// 4 Wriggle
+		{
+			{0, 0, 0, 1},
+			{0, 0, 0, 1},
+			{0, 0, 1, 1},
+			{0, 0, 1, 0},
+			{0, 1, 0, 0},
+			{1, 1, 0, 0},
+			{1, 0, 0, 0},
+			{1, 0, 0, 0},
+			{1, 0, 0, 0},
+			{1, 0, 0, 0},
+			{1, 1, 0, 0},
+			{0, 1, 0, 0},
+			{0, 0, 1, 0},
+			{0, 0, 1, 1},
+			{0, 0, 0, 1},
+			{0, 0, 0, 1}
+		},
+		// 5 Apartments
+		{
+			{0, 0, 0, 0},
+			{1, 1, 1, 1},
+			{0, 0, 0, 0},
+			{1, 1, 1, 1},
+			{0, 0, 0, 0},
+			{1, 1, 1, 1},
+			{0, 0, 0, 0},
+			{1, 0, 1, 0},
+			{1, 0, 1, 0},
+			{1, 0, 1, 0},
+			{1, 0, 1, 0},
+			{0, 0, 0, 0},
+			{1, 0, 1, 0},
+			{1, 0, 1, 0},
+			{1, 0, 1, 0},
+			{1, 0, 1, 0}
+		},
+		// 6 Papneo
+		{
+			{1, 0, 0, 0},
+			{1, 0, 1, 1},
+			{1, 0, 0, 1},
+			{1, 1, 0, 1},
+			{0, 0, 0, 1},
+			{1, 0, 0, 0},
+			{1, 1, 1, 1},
+			{0, 0, 0, 0},
+			{1, 1, 0, 1},
+			{1, 1, 0, 1},
+			{0, 0, 0, 1},
+			{1, 1, 0, 1},
+			{0, 1, 0, 0},
+			{0, 1, 0, 1},
+			{0, 1, 0, 1},
+			{0, 0, 0, 0}
+		},
+		// 7 Shimmer
+		{
+			{1, 0, 0, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0},
+			{0, 1, 0, 0},
+			{1, 0, 0, 0},
+			{0, 0, 0, 0},
+			{0, 0, 1, 0},
+			{0, 1, 0, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 1},
+			{0, 0, 1, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 1},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0}
+		},
+		// 8 CHM
+		{
+			{0, 0, 0, 0},
+			{1, 0, 0, 1},
+			{0, 1, 1, 0},
+			{1, 0, 0, 1},
+			{1, 0, 0, 1},
+			{0, 1, 1, 0},
+			{0, 0, 0, 0},
+			{0, 0, 0, 0},
+			{1, 0, 0, 1},
+			{0, 1, 1, 0},
+			{1, 0, 0, 1},
+			{0, 1, 1, 0},
+			{1, 0, 0, 1},
+			{0, 1, 1, 0},
+			{1, 0, 0, 1},
+			{0, 1, 1, 0}
+		}
 	};
 
 	// Value of the row select parameter.
@@ -144,6 +281,15 @@ struct Bitwise : Module {
 	// Value of the row select CV input voltage attenuator.
 	float rowSelectionCVInputVoltageAttenuator = 0.f;
 
+	// Value of the pattern select parameter.
+	float patternSelection = 0.f;
+
+	// Value of the pattern select CV input voltage.
+	float patternSelectionCVInputVoltage = 0.f;
+
+	// Value of the pattern select CV input voltage attenuator.
+	float patternSelectionCVInputVoltageAttenuator = 0.f;
+
 	// Values of the main input voltages.
 	float inputVoltage[numberOfColumns] = {0.f};
 
@@ -153,9 +299,11 @@ struct Bitwise : Module {
 	// Placeholder for currentPatternLight
 	int currentPatternLight = 0;
 
-	// Set the maximum value of the row select parameter to be just less than actual maximum to avoid wraparound to zero.
-	// @todo Use the snapTo() methods instead.
-	float maxRowSelectionRangeValue = 15.99f;
+	// Maximum value of the row select parameter.
+	float maxRowSelectionRangeValue = 16.f;
+
+	// Maximum value of the pattern select parameter.
+	float maxPatternSelectionRangeValue = 8.f;
 
 	// Schmitt Triggers to process the trigger inputs.
 	dsp::SchmittTrigger inputTrigger[4];
@@ -166,11 +314,11 @@ struct Bitwise : Module {
 	Bitwise() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
-		configParam(PATTERN_SELECT_PARAM, 0.f, 1.f, 0.f, "Pattern select");
+		configParam(PATTERN_SELECT_PARAM, 1.f, maxPatternSelectionRangeValue, 1.f, "Pattern select");
 		configParam(PATTERN_SELECT_CV_ATN_PARAM, 0.f, 1.f, 0.f, "Pattern select CV attenuator");
 
-		configParam(ROW_SELECT_PARAM, 0.f, maxRowSelectionRangeValue, 0.f, "Pattern row select");
-		configParam(ROW_SELECT_CV_ATN_PARAM, 0.f, 1.f, 0.f, "Pattern row select CV attenuator");
+		configParam(ROW_SELECT_PARAM, 1.f, maxRowSelectionRangeValue, 1.f, "Row select");
+		configParam(ROW_SELECT_CV_ATN_PARAM, 0.f, 1.f, 0.f, "Row select CV attenuator");
 	}
 
 	void process(const ProcessArgs &args) override {
@@ -187,21 +335,46 @@ struct Bitwise : Module {
 			// Get the value of the row select CV input voltage attenuator.
 			rowSelectionCVInputVoltageAttenuator = params[ROW_SELECT_CV_ATN_PARAM].getValue();
 
-			// Set the row select value based on the combination of the pattern select parameter value, pattern select CV input voltage and pattern select CV input voltage attenuator. Phew!
-			rowSelection =	clampSafe(
-								rescale(
-									rowSelectionCVInputVoltage
-									* rowSelectionCVInputVoltageAttenuator
-									* pow(2, numberOfColumns),
-										0.f,
-										10.f * pow(2, numberOfColumns),
-										0.f,
-										pow(2, numberOfColumns)
-								)
-								+ rowSelection,
-								0.f,
-								maxRowSelectionRangeValue
-							);
+			// Set the row select value based on the combination of the row select parameter value, row select CV input voltage and row select CV input voltage attenuator. Phew!
+			rowSelection = clampSafe(
+				rescale(
+					rowSelectionCVInputVoltage * rowSelectionCVInputVoltageAttenuator * numberOfRows,
+					0.f,
+					10.f * numberOfRows,
+					0.f,
+					numberOfRows
+				)
+				+ rowSelection,
+				1.f,
+				maxRowSelectionRangeValue
+			);
+		}
+
+		// Get the value of the pattern select parameter.
+		patternSelection = params[PATTERN_SELECT_PARAM].getValue();
+
+		// Check if the pattern select CV input is in use.
+		if (inputs[PATTERN_SELECT_CV_INPUT].isConnected()) {
+
+			// Get the value of the pattern select CV input voltage.
+			patternSelectionCVInputVoltage = inputs[PATTERN_SELECT_CV_INPUT].getVoltage();
+
+			// Get the value of the pattern select CV input voltage attenuator.
+			patternSelectionCVInputVoltageAttenuator = params[PATTERN_SELECT_CV_ATN_PARAM].getValue();
+
+			// Set the pattern select value based on the combination of the pattern select parameter value, pattern select CV input voltage and pattern select CV input voltage attenuator. Phew!
+			patternSelection = clampSafe(
+				rescale(
+					patternSelectionCVInputVoltage * patternSelectionCVInputVoltageAttenuator * numberOfPatterns,
+					0.f,
+					10.f * numberOfPatterns,
+					0.f,
+					numberOfPatterns
+				)
+				+ patternSelection,
+				1.f,
+				maxPatternSelectionRangeValue
+			);
 		}
 
 		// Set pattern indicator lights.
@@ -209,8 +382,8 @@ struct Bitwise : Module {
 			for (int j = 0; j < 4; j++) {
 				float brightness = 0.f;
 				currentPatternLight = j + (i * 4) + 8;
-				if (pattern[i][j] == 1) {
-					if ((int)rowSelection == i) {
+				if (patterns[(unsigned int)patternSelection - 1][i][j] == 1) {
+					if ((int)rowSelection - 1 == i) {
 						brightness = 1.f;
 					} else {
 						brightness = 0.3f;
@@ -227,7 +400,7 @@ struct Bitwise : Module {
 
 			// Is the current column selected in the pattern?
 			// @todo Refactor this to use the two-dimensional array.
-			isCurrentColumnSelected = pattern[(unsigned int)rowSelection][i];
+			isCurrentColumnSelected = patterns[(unsigned int)patternSelection - 1][(unsigned int)rowSelection - 1][i];
 
 			// Set the column light's brightness to indicate if it is selected. Yes means full brightness, no means hit the road, pal.
 			lights[i].setBrightness((isCurrentColumnSelected) ? 1.f : 0.f);
@@ -241,17 +414,19 @@ struct Bitwise : Module {
 				pulseOutput[4 + i].trigger(1e-1f);
 			}
 
-			// Set the output voltage for the current slot.
+			// Set the output voltage for the current column.
 			outputs[i].setVoltage(inputVoltage[i]);
 
-			// 	Set the pulse output for the current slot.
+			// 	Set the pulse output for the current column.
 			outputs[4 + i].setVoltage(pulseOutput[i].process(args.sampleTime));
 
+			// Set the pulse light for the current column.
 			lights[4 + i].setBrightness((pulseOutput[4 + i].process(args.sampleTime)) ? 1.f : 0.f);
 
 		} // End of do stuff on the columns for loop.
 
 	} // End of process() function.
+
 };
 
 
@@ -265,8 +440,10 @@ struct BitwiseWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH * 2, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(17.833, 33.475)), module, Bitwise::ROW_SELECT_PARAM));
-		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(53.287, 33.475)), module, Bitwise::PATTERN_SELECT_PARAM));
+		addParam(createParamCentered<RoundLargeBlackSnapKnob>(mm2px(Vec(19.42, 33.475)), module, Bitwise::ROW_SELECT_PARAM));
+		addParam(createParamCentered<RoundLargeBlackSnapKnob>(mm2px(Vec(51.7, 33.475)), module, Bitwise::PATTERN_SELECT_PARAM));
+		// addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(19.42, 33.475)), module, Bitwise::ROW_SELECT_PARAM));
+		// addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(51.7, 33.475)), module, Bitwise::PATTERN_SELECT_PARAM));
 		addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(6.456, 46.275)), module, Bitwise::ROW_SELECT_CV_ATN_PARAM));
 		addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(64.664, 46.275)), module, Bitwise::PATTERN_SELECT_CV_ATN_PARAM));
 
