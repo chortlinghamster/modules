@@ -305,8 +305,11 @@ struct Bitwise : Module {
 	// Maximum value of the pattern select parameter.
 	float maxPatternSelectionRangeValue = 8.f;
 
+	// Value of trig all input.
+	float triggerAllInputValue = 0.f;
+
 	// Schmitt Triggers to process the trigger inputs.
-	dsp::SchmittTrigger inputTrigger[4];
+	dsp::SchmittTrigger inputTrigger[5];
 
 	// Pulse outputs.
 	dsp::PulseGenerator pulseOutput[8];
@@ -322,6 +325,9 @@ struct Bitwise : Module {
 	}
 
 	void process(const ProcessArgs &args) override {
+
+		// Check trigger all input.
+		triggerAllInputValue = inputTrigger[4].process(inputs[TRIGGER_ALL_INPUT].getVoltage() / 0.7);
 
 		// Get the value of the row select parameter.
 		rowSelection = params[ROW_SELECT_PARAM].getValue();
@@ -395,6 +401,8 @@ struct Bitwise : Module {
 			}
 		}
 
+
+
 		// Loop through the columns and do stuff on them.
 		for (int i = 0; i < numberOfColumns; i++) {
 
@@ -407,9 +415,12 @@ struct Bitwise : Module {
 
 			// Carry out the sample and hold operation on the column only if the current pattern column is selected.
 			// Also, send a pulse if this column is selected and triggered.
-			if (inputTrigger[i].process(inputs[4 + i].getVoltage() / 0.7) && isCurrentColumnSelected) {
+			if ((inputTrigger[i].process(inputs[4 + i].getVoltage() / 0.7) || triggerAllInputValue) && isCurrentColumnSelected) {
+
 				inputVoltage[i] = inputs[i].getVoltage();
+
 				pulseOutput[i].trigger(1e-3f);
+
 				// Pulse light trigger.
 				pulseOutput[4 + i].trigger(1e-1f);
 			}
