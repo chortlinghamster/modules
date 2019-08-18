@@ -38,8 +38,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.8139916"
-     inkscape:cx="119.79134"
-     inkscape:cy="154.63137"
+     inkscape:cx="84.785661"
+     inkscape:cy="242.83464"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -107,31 +107,12 @@
        inkscape:connector-curvature="0"
        inkscape:label="logo_bg_part1" />
     <path
-       style="display:inline;fill:#ff7f2a;fill-opacity:1;stroke-width:0.07923847"
+       style="display:inline;fill:#ffccaa;fill-opacity:1;stroke-width:0.07923847"
        d="m 0,259.82906 v 1 h 71.120205 v -1 H 35.560103 Z"
        id="path1045"
        inkscape:connector-curvature="0"
        inkscape:label="horizon"
        sodipodi:nodetypes="cccccc" />
-    <path
-       sodipodi:type="star"
-       style="fill:#ffeeaa;fill-opacity:0.3764706;stroke:none;stroke-width:0.01683953;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="path1067"
-       sodipodi:sides="23"
-       sodipodi:cx="35.562584"
-       sodipodi:cy="292.09375"
-       sodipodi:r1="1.383252"
-       sodipodi:r2="6.0141392"
-       sodipodi:arg1="0.7449578"
-       sodipodi:arg2="0.88154878"
-       inkscape:flatsided="false"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 36.579435,293.03151 2.807881,3.7035 -3.098594,-3.46393 1.704565,4.32372 -2.049132,-4.17147 0.47483,4.62327 -0.847697,-4.56963 -0.790121,4.57994 0.416609,-4.62888 -1.996473,4.19692 1.650017,-4.34482 -3.054755,3.50265 2.76105,-3.73854 -3.88648,2.54859 3.667309,-2.85498 -4.429963,1.40553 4.301581,-1.75968 -4.644896,0.15822 4.616824,-0.53388 -4.515337,-1.10083 4.589658,0.73153 -4.050898,-2.27823 4.222098,1.94267 -3.28602,-3.28666 3.541405,3.00974 -2.277435,-4.05134 2.598061,3.85359 -1.099942,-4.51555 1.462032,4.41163 0.159127,-4.64486 0.217571,4.64249 1.406396,-4.42968 -1.043027,4.52903 2.549358,-3.88598 -2.226269,4.07968 3.503247,-3.05407 -3.244398,3.32776 4.197316,-1.99565 -4.021905,2.32902 4.580088,-0.78922 -4.501126,1.15756 4.623177,0.47574 -4.646519,-0.0998 4.323385,1.70541 -4.4473,-1.34967 3.702948,2.80861 z"
-       inkscape:transform-center-x="0.026722394"
-       inkscape:transform-center-y="0.041398856"
-       inkscape:label="bling"
-       transform="rotate(3,35.567751,292.04289)" />
     <g
        style="display:inline"
        id="g1070"
