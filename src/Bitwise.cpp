@@ -327,7 +327,7 @@ struct Bitwise : Module {
 
 			// Here's the crazy logic which decides if a sample and hold column is triggered. If you can make it better I will buy you a bag of Jelly Tots. Note that individual trigger inputs take priority over the trigger all input.
 			if (
-				// Do the sample and hold if the current column's trigger in port is connected, and its been triggered.
+				// Do the sample and hold if the current column's trigger in port is connected, and it's been triggered.
 				(inputs[IN_TRIGGER + i].isConnected() && triggers[i].process(inputs[IN_TRIGGER + i].getVoltage() / 0.7) && isTheCurrentColumnSelected)
 
 				// OR!
@@ -416,7 +416,7 @@ struct BitwiseWidget : ModuleWidget {
 
 		// (Shake it all about puts!)
 
-		// Blikenlights!
+		// Blinkenlights!
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 0));
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 1));
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 2));
