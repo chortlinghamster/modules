@@ -9,12 +9,6 @@ extern Plugin *pluginInstance;
 extern Model *modelPop;
 extern Model *modelBitwise;
 
-struct RoundLargeBlackSnapKnob: RoundLargeBlackKnob {
-	RoundLargeBlackSnapKnob() {
-		snap = true;
-	}
-};
-
 struct CHMRoundLargeKnob : RoundKnob {
 	CHMRoundLargeKnob() {
 		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CHMRoundLargeKnob.svg")));
