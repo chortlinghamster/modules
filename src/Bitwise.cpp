@@ -1,8 +1,9 @@
 #include "ChortlingHamsterModules.hpp"
 
-static float setSelection(float &val, float &cv, float &attn, float &max)
+// Helper function to set the values of the row and pattern selections.
+static int setSelection(float val, float cv, float attn, float max)
 {
-	return clampSafe(
+	return (int)clampSafe(
 		rescale(
 			cv * attn * max,
 			0.f,
@@ -46,184 +47,173 @@ struct Bitwise : Module {
 		NUM_LIGHTS
 	};
 
-	// Being pedantic. You never know.
+	// Setting these just in case. For later, y'know?
 	static const int numberOfPatterns = 8;
 	static const int numberOfRows = 16;
 	static const int numberOfColumns = 4;
+	static const int numberOfPatternSlots = numberOfRows * numberOfColumns;
 
-	// Test pattern
-	int patterns[numberOfPatterns][numberOfRows][numberOfColumns] = {
+	// Patterns, patterns and more patterns. Well. Eight of them. I mean, you've got to stop somewhere, right?
+	int patterns[numberOfPatterns][numberOfPatternSlots] = {
 		// 1 Hexed
 		{
-			{0, 0, 0, 0},
-			{0, 0, 0, 1},
-			{0, 0, 1, 0},
-			{0, 0, 1, 1},
-			{0, 1, 0, 0},
-			{0, 1, 0, 1},
-			{0, 1, 1, 0},
-			{0, 1, 1, 1},
-			{1, 0, 0, 0},
-			{1, 0, 0, 1},
-			{1, 0, 1, 0},
-			{1, 0, 1, 1},
-			{1, 1, 0, 0},
-			{1, 1, 0, 1},
-			{1, 1, 1, 0},
-			{1, 1, 1, 1}
+			0, 0, 0, 0,
+			0, 0, 0, 1,
+			0, 0, 1, 0,
+			0, 0, 1, 1,
+			0, 1, 0, 0,
+			0, 1, 0, 1,
+			0, 1, 1, 0,
+			0, 1, 1, 1,
+			1, 0, 0, 0,
+			1, 0, 0, 1,
+			1, 0, 1, 0,
+			1, 0, 1, 1,
+			1, 1, 0, 0,
+			1, 1, 0, 1,
+			1, 1, 1, 0,
+			1, 1, 1, 1
 		},
 		// 2 Stairs
 		{
-			{0, 0, 0, 0},
-			{0, 0, 0, 1},
-			{0, 0, 1, 1},
-			{0, 1, 1, 1},
-			{1, 1, 1, 1},
-			{1, 1, 1, 0},
-			{1, 1, 0, 0},
-			{1, 0, 0, 0},
-			{0, 0, 0, 0},
-			{1, 0, 0, 0},
-			{1, 1, 0, 0},
-			{1, 1, 1, 0},
-			{1, 1, 1, 1},
-			{0, 1, 1, 1},
-			{0, 0, 1, 1},
-			{0, 0, 0, 1}
+			0, 0, 0, 0,
+			0, 0, 0, 1,
+			0, 0, 1, 1,
+			0, 1, 1, 1,
+			1, 1, 1, 1,
+			1, 1, 1, 0,
+			1, 1, 0, 0,
+			1, 0, 0, 0,
+			0, 0, 0, 0,
+			1, 0, 0, 0,
+			1, 1, 0, 0,
+			1, 1, 1, 0,
+			1, 1, 1, 1,
+			0, 1, 1, 1,
+			0, 0, 1, 1,
+			0, 0, 0, 1
 		},
 		// 3 Snow
 		{
-			{0, 1, 0, 0},
-			{1, 0, 0, 1},
-			{1, 0, 1, 0},
-			{1, 0, 0, 1},
-			{0, 1, 0, 0},
-			{1, 0, 0, 1},
-			{0, 0, 1, 0},
-			{1, 1, 1, 1},
-			{0, 1, 0, 1},
-			{1, 0, 0, 1},
-			{0, 0, 1, 0},
-			{1, 0, 0, 1},
-			{1, 1, 0, 0},
-			{1, 0, 0, 1},
-			{0, 0, 1, 1},
-			{1, 0, 0, 1}
+			0, 1, 0, 0,
+			1, 0, 0, 1,
+			1, 0, 1, 0,
+			1, 0, 0, 1,
+			0, 1, 0, 0,
+			1, 0, 0, 1,
+			0, 0, 1, 0,
+			1, 1, 1, 1,
+			0, 1, 0, 1,
+			1, 0, 0, 1,
+			0, 0, 1, 0,
+			1, 0, 0, 1,
+			1, 1, 0, 0,
+			1, 0, 0, 1,
+			0, 0, 1, 1,
+			1, 0, 0, 1
 		},
 		// 4 Wriggle
 		{
-			{0, 0, 0, 1},
-			{0, 0, 0, 1},
-			{0, 0, 1, 1},
-			{0, 0, 1, 0},
-			{0, 1, 0, 0},
-			{1, 1, 0, 0},
-			{1, 0, 0, 0},
-			{1, 0, 0, 0},
-			{1, 0, 0, 0},
-			{1, 0, 0, 0},
-			{1, 1, 0, 0},
-			{0, 1, 0, 0},
-			{0, 0, 1, 0},
-			{0, 0, 1, 1},
-			{0, 0, 0, 1},
-			{0, 0, 0, 1}
+			0, 0, 0, 1,
+			0, 0, 0, 1,
+			0, 0, 1, 1,
+			0, 0, 1, 0,
+			0, 1, 0, 0,
+			1, 1, 0, 0,
+			1, 0, 0, 0,
+			1, 0, 0, 0,
+			1, 0, 0, 0,
+			1, 0, 0, 0,
+			1, 1, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 1, 1,
+			0, 0, 0, 1,
+			0, 0, 0, 1
 		},
 		// 5 Apartments
 		{
-			{0, 0, 0, 0},
-			{1, 1, 1, 1},
-			{0, 0, 0, 0},
-			{1, 1, 1, 1},
-			{0, 0, 0, 0},
-			{1, 1, 1, 1},
-			{0, 0, 0, 0},
-			{1, 0, 1, 0},
-			{1, 0, 1, 0},
-			{1, 0, 1, 0},
-			{1, 0, 1, 0},
-			{0, 0, 0, 0},
-			{1, 0, 1, 0},
-			{1, 0, 1, 0},
-			{1, 0, 1, 0},
-			{1, 0, 1, 0}
+			0, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 0, 0, 0,
+			1, 0, 1, 0,
+			1, 0, 1, 0,
+			1, 0, 1, 0,
+			1, 0, 1, 0,
+			0, 0, 0, 0,
+			1, 0, 1, 0,
+			1, 0, 1, 0,
+			1, 0, 1, 0,
+			1, 0, 1, 0
 		},
 		// 6 Papneo
 		{
-			{1, 0, 0, 0},
-			{1, 0, 1, 1},
-			{1, 0, 0, 1},
-			{1, 1, 0, 1},
-			{0, 0, 0, 1},
-			{1, 0, 0, 0},
-			{1, 1, 1, 1},
-			{0, 0, 0, 0},
-			{1, 1, 0, 1},
-			{1, 1, 0, 1},
-			{0, 0, 0, 1},
-			{1, 1, 0, 1},
-			{0, 1, 0, 0},
-			{0, 1, 0, 1},
-			{0, 1, 0, 1},
-			{0, 0, 0, 0}
+			1, 0, 0, 0,
+			1, 0, 1, 1,
+			1, 0, 0, 1,
+			1, 1, 0, 1,
+			0, 0, 0, 1,
+			1, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 0, 0, 0,
+			1, 1, 0, 1,
+			1, 1, 0, 1,
+			0, 0, 0, 1,
+			1, 1, 0, 1,
+			0, 1, 0, 0,
+			0, 1, 0, 1,
+			0, 1, 0, 1,
+			0, 0, 0, 0
 		},
 		// 7 Shimmer
 		{
-			{1, 0, 0, 0},
-			{0, 0, 0, 0},
-			{0, 0, 0, 0},
-			{0, 1, 0, 0},
-			{1, 0, 0, 0},
-			{0, 0, 0, 0},
-			{0, 0, 1, 0},
-			{0, 1, 0, 0},
-			{0, 0, 0, 0},
-			{0, 0, 0, 1},
-			{0, 0, 1, 0},
-			{0, 0, 0, 0},
-			{0, 0, 0, 0},
-			{0, 0, 0, 1},
-			{0, 0, 0, 0},
-			{0, 0, 0, 0}
+			1, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 1, 0, 0,
+			1, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 1, 0,
+			0, 1, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 1,
+			0, 0, 1, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 1,
+			0, 0, 0, 0,
+			0, 0, 0, 0
 		},
 		// 8 CHM
 		{
-			{0, 0, 0, 0},
-			{1, 0, 0, 1},
-			{0, 1, 1, 0},
-			{1, 0, 0, 1},
-			{1, 0, 0, 1},
-			{0, 1, 1, 0},
-			{0, 0, 0, 0},
-			{0, 0, 0, 0},
-			{1, 0, 0, 1},
-			{0, 1, 1, 0},
-			{1, 0, 0, 1},
-			{0, 1, 1, 0},
-			{1, 0, 0, 1},
-			{0, 1, 1, 0},
-			{1, 0, 0, 1},
-			{0, 1, 1, 0}
+			0, 0, 0, 0,
+			1, 0, 0, 1,
+			0, 1, 1, 0,
+			1, 0, 0, 1,
+			1, 0, 0, 1,
+			0, 1, 1, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			1, 0, 0, 1,
+			0, 1, 1, 0,
+			1, 0, 0, 1,
+			0, 1, 1, 0,
+			1, 0, 0, 1,
+			0, 1, 1, 0,
+			1, 0, 0, 1,
+			0, 1, 1, 0
 		}
 	};
 
 	// Value of the row select parameter.
-	float row = 0.f;
-
-	// Value of the row select CV input voltage.
-	float rowCV = 0.f;
-
-	// Value of the row select CV input voltage attenuator.
-	float rowCVAttn = 0.f;
+	int row = 0;
 
 	// Value of the pattern select parameter.
-	float pattern = 0.f;
-
-	// Value of the pattern select CV input voltage.
-	float patternCV = 0.f;
-
-	// Value of the pattern select CV input voltage attenuator.
-	float patternCVAttn = 0.f;
+	int pattern = 0;
 
 	// Values of the main input voltages.
 	float inputVoltage[numberOfColumns] = {0.f};
@@ -231,163 +221,122 @@ struct Bitwise : Module {
 	// As it says on the tin.
 	bool isCurrentColumnSelected = false;
 
-	// Placeholder for currentPatternLight
-	int currentPatternLight = 0;
-
-	// Maximum value of the row select parameter.
-	float maxRows = (float)numberOfRows;
-
-	// Maximum value of the pattern select parameter.
-	float maxPatterns = (float)numberOfPatterns;
-
-	// Value of trig all input.
-	float triggerAll = 0.f;
-
-	// Schmitt Triggers to process the trigger inputs, 1 to 4 and all.
+	// Schmitt Triggers to process the trigger inputs.
+	// 0 to 3: trig inputs.
+	// 4:: trig all input.
 	dsp::SchmittTrigger triggers[5];
 
 	// Pulse generators.
+	// 0 to 3: pulse output voltages.
+	// 4 to 7: pulse output lights.
 	dsp::PulseGenerator pulses[8];
 
 	Bitwise() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
-		configParam(PATTERN_SELECT_PARAM, 1.f, maxPatterns, 1.f, "Pattern select");
-		configParam(PATTERN_SELECT_CV_ATN_PARAM, 0.f, 1.f, 0.f, "Pattern select CV attenuator");
-
-		configParam(ROW_SELECT_PARAM, 1.f, maxRows, 1.f, "Row select");
+		// Configure the row select parameter knobs.
+		configParam(ROW_SELECT_PARAM, 1.f, (float)numberOfRows, 1.f, "Row select");
 		configParam(ROW_SELECT_CV_ATN_PARAM, 0.f, 1.f, 0.f, "Row select CV attenuator");
+
+		// Configure the pattern select parameter knobs.
+		configParam(PATTERN_SELECT_PARAM, 1.f, (float)numberOfPatterns, 1.f, "Pattern select");
+		configParam(PATTERN_SELECT_CV_ATN_PARAM, 0.f, 1.f, 0.f, "Pattern select CV attenuator");
 	}
 
 	void process(const ProcessArgs &args) override {
 
-		// Check trigger all input.
-		triggerAll = triggers[4].process(inputs[TRIGGER_ALL_INPUT].getVoltage() / 0.7);
+		// Set the current row, based on combination of the row select parameter value, row select CV input voltage and row select CV input voltage attenuator. Crikey!
+		// Remember, row is an int so the float returned from setSelection() has its fractional part removed.
+		row = (inputs[ROW_SELECT_CV_INPUT].isConnected())
+			? setSelection(
+				// The row select parameter knob's value.
+				params[ROW_SELECT_PARAM].getValue(),
 
-		// Get the value of the row select parameter.
-		row = params[ROW_SELECT_PARAM].getValue();
+				inputs[ROW_SELECT_CV_INPUT].getVoltage(),
+				params[ROW_SELECT_CV_ATN_PARAM].getValue(),
+				(float)numberOfRows
+			)
+			: params[ROW_SELECT_PARAM].getValue();
 
-		// Check if the row select CV input is in use.
-		if (inputs[ROW_SELECT_CV_INPUT].isConnected()) {
-
-			// Get the value of the row select CV input voltage.
-			rowCV = inputs[ROW_SELECT_CV_INPUT].getVoltage();
-
-			// Get the value of the row select CV input voltage attenuator.
-			rowCVAttn = params[ROW_SELECT_CV_ATN_PARAM].getValue();
-
-			// Set the row select value based on the combination of the row select parameter value, row select CV input voltage and row select CV input voltage attenuator. Phew!
-			row = setSelection(row, rowCV, rowCVAttn, maxRows);
-			// row = clampSafe(
-			// 	rescale(
-			// 		rowCV * rowCVAttn * maxRows,
-			// 		0.f,
-			// 		10.f * maxRows,
-			// 		0.f,
-			// 		maxRows
-			// 	)
-			// 	+ row,
-			// 	1.f,
-			// 	maxRow
-			// );
-		}
-
-		// Get the value of the pattern select parameter.
-		pattern = params[PATTERN_SELECT_PARAM].getValue();
-
-		// Check if the pattern select CV input is in use.
-		if (inputs[PATTERN_SELECT_CV_INPUT].isConnected()) {
-
-			// Get the value of the pattern select CV input voltage.
-			patternCV = inputs[PATTERN_SELECT_CV_INPUT].getVoltage();
-
-			// Get the value of the pattern select CV input voltage attenuator.
-			patternCVAttn = params[PATTERN_SELECT_CV_ATN_PARAM].getValue();
-
-			// Set the pattern select value based on the combination of the pattern select parameter value, pattern select CV input voltage and pattern select CV input voltage attenuator. Phew!
-			pattern = setSelection(pattern, patternCV, patternCVAttn, maxPatterns);
-
-			// pattern = clampSafe(
-			// 	rescale(
-			// 		patternCV * patternCVAttn * numberOfPatterns,
-			// 		0.f,
-			// 		10.f * numberOfPatterns,
-			// 		0.f,
-			// 		numberOfPatterns
-			// 	)
-			// 	+ pattern,
-			// 	1.f,
-			// 	maxPatterns
-			// );
-		}
+		// Set the pattern select value based on the combination of the pattern select parameter value, pattern select CV input voltage and pattern select CV input voltage attenuator. Well, I'll go t'foot of our stairs!
+		// Remember, pattern is an int so the float returned from setSelection() has its fractional part removed.
+		pattern = (inputs[PATTERN_SELECT_CV_INPUT].isConnected())
+			? setSelection(
+				params[PATTERN_SELECT_PARAM].getValue(),
+				inputs[PATTERN_SELECT_CV_INPUT].getVoltage(),
+				params[PATTERN_SELECT_CV_ATN_PARAM].getValue(),
+				(float)numberOfPatterns
+			)
+			: params[PATTERN_SELECT_PARAM].getValue();
 
 		// Set pattern indicator lights.
-		for (int i = 0; i < numberOfRows; i++) {
-			for (int j = 0; j < numberOfColumns; j++) {
-				float brightness = 0.f;
-				currentPatternLight = j + (i * numberOfColumns) + 8;
-				if (patterns[(unsigned int)pattern - 1][i][j] == 1) {
-					if ((int)row - 1 == i) {
-						brightness = 1.f;
-					} else {
-						brightness = 0.3f;
-					}
-				} else {
-					brightness = 0.f;
-				}
-				lights[currentPatternLight].setBrightness(brightness);
-			}
-		}
+		for (int i = 0; i < numberOfPatternSlots; i++)
+		{
+			lights[PATTERN_INDICATOR_LIGHT + i].setBrightness(
+				// Is this light set in the current patttern?
+				(patterns[pattern - 1][i] == 1)
+				// Yes it is. So, is this light also set in the currently selected row?
+				? (i / numberOfColumns == row - 1)
+					// Set this light's brightness to full, as it is in the currently selected row and also it is set to active in the currently selected pattern. Yay!
+					? 1.f
+					// Set this light's brightness to be dimmer, as it is not in the currently selected row, but it is set to active in the currently selected pattern. w00t!
+					: 0.3f
+				// This light isn't in the currently selected row, neither is it set to active in the currently selected pattern, so turn it off. What a party pooper!
+				: 0.f
+			); // End of setBrightness()
+		} // End of pattern indicator lights for loop.
 
-		// Loop through the columns and do stuff on them.
+		// Loop through the four sample and hold circuits and do stuff to them. Nasty, evil stuff. Muahahahaaa!
 		for (int i = 0; i < numberOfColumns; i++) {
 
-			// Is the current column selected in the pattern?
-			// @todo Refactor this to use the two-dimensional array.
-			isCurrentColumnSelected = patterns[(unsigned int)pattern - 1][(unsigned int)row - 1][i];
+			// Is the current circuit selected in the pattern?
+			isCurrentColumnSelected = patterns[pattern - 1][((row - 1) * numberOfColumns) + i];
 
-			// Set the column light's brightness to indicate if it is selected. Yes means full brightness, no means hit the road, pal.
+			// Set the circuit's active light brightness full brightness if, er, active. Terrible, terrible darkness if not. Brrr!
 			lights[i].setBrightness((isCurrentColumnSelected) ? 1.f : 0.f);
 
-			if (inputs[4 + i].isConnected() && triggers[i].process(inputs[4 + i].getVoltage() / 0.7) && isCurrentColumnSelected) {
+			// Here's the crazy logic which decides if a sample and hold circuit is triggered.
+			if (isCurrentColumnSelected) {
+				if (
+					// Do the sample and hold if the current circuit's trigger in port is connected, and its been triggered.
+					// Note that individual trigger inputs take priority over the trigger all input.
+					(inputs[IN_TRIGGER + i].isConnected() && triggers[i].process(inputs[IN_TRIGGER + i].getVoltage() / 0.7))
+					||
+					// Or, do the sample and hold if the current circuit's trigger in port isn't connected, but the trigger all in port is, and the trigger all in port has been triggered.
+					(!inputs[IN_TRIGGER + i].isConnected() && inputs[TRIGGER_ALL_INPUT].isConnected() && triggers[4].process(inputs[TRIGGER_ALL_INPUT].getVoltage() / 0.7))
+				) {
+					// Capture the current column's input voltage.
+					inputVoltage[i] = inputs[i].getVoltage();
 
-				// Capture the current column's input voltage.
-				inputVoltage[i] = inputs[i].getVoltage();
+					// Pulse the output for this column.
+					pulses[i].trigger(1e-3f);
 
-				// Pulse the output for this column.
-				pulses[i].trigger(1e-3f);
+					// Pulse light trigger.
+					pulses[4 + i].trigger(1e-1f);
+				}
+			} // End of if isCurrentColumnSelected.
 
-				// Pulse light trigger.
-				pulses[4 + i].trigger(1e-1f);
 
-			} else if (!inputs[4 + i].isConnected() && inputs[TRIGGER_ALL_INPUT].isConnected() && triggerAll && isCurrentColumnSelected) {
-				// Capture the current column's input voltage.
-				inputVoltage[i] = inputs[i].getVoltage();
+			// Set the output voltage, if connected.
+			if (outputs[OUT_VOLTAGE + i].isConnected())
+				outputs[OUT_VOLTAGE + i].setVoltage(inputVoltage[i]);
 
-				// Pulse the output for this column.
-				pulses[i].trigger(1e-3f);
+			// Set the polyphonic output voltage, if connected.
+			if (outputs[POLYPHONIC_OUT_OUTPUT].isConnected())
+				outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(inputVoltage[i], i);
 
-				// Pulse light trigger.
-				pulses[4 + i].trigger(1e-1f);
-			}
-
-			// Set the output voltage for the current column.
-			outputs[i].setVoltage(inputVoltage[i]);
-
-			// Set the polyphonic output voltages.
-			outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(outputs[i].getVoltage(), i);
-
-			// Set the pulse output for the current column.
-			outputs[4 + i].setVoltage((pulses[i].process(args.sampleTime)) ? 10.f : 0.f);
+			// Set the pulse output for the current column, if connected.
+			if (outputs[OUT_PULSE + i].isConnected())
+				outputs[OUT_PULSE + i].setVoltage((pulses[i].process(args.sampleTime)) ? 10.f : 0.f);
 
 			// Set the pulse light for the current column.
-			lights[4 + i].setBrightness((pulses[4 + i].process(args.sampleTime)) ? 1.f : 0.f);
+			lights[PULSE_LIGHT + i].setBrightness((pulses[4 + i].process(args.sampleTime)) ? 1.f : 0.f);
 
 		} // End of do stuff on the columns for loop.
 
-		// Set polyphonic output channels..
-		outputs[POLYPHONIC_OUT_OUTPUT].setChannels(numberOfColumns);
-
+		// Set polyphonic output channels.
+		if (outputs[POLYPHONIC_OUT_OUTPUT].isConnected())
+			outputs[POLYPHONIC_OUT_OUTPUT].setChannels(numberOfColumns);
 
 	} // End of process() function.
 
