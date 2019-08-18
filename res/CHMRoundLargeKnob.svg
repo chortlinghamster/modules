@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="12.7mm"
+   height="12.7mm"
+   viewBox="0 0 12.7 12.7"
+   version="1.1"
+   id="svg980"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="CHMRoundLargeKnob.svg">
+  <defs
+     id="defs974" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="12.904699"
+     inkscape:cx="17.374506"
+     inkscape:cy="24"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1132"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata977">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="knob"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-284.3)">
+    <path
+       style="fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:6.25649548;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 24,0 A 24,24 0 0 0 0,24 24,24 0 0 0 24,48 24,24 0 0 0 48,24 24,24 0 0 0 24,0 Z m 0,5.5742188 A 18.425197,18.425197 0 0 1 42.425781,24 18.425197,18.425197 0 0 1 24,42.425781 18.425197,18.425197 0 0 1 5.5742188,24 18.425197,18.425197 0 0 1 24,5.5742188 Z"
+       transform="matrix(0.26458333,0,0,0.26458333,0,284.3)"
+       id="path1525"
+       inkscape:connector-curvature="0"
+       inkscape:label="outer" />
+    <circle
+       r="4.875"
+       inkscape:label="inner"
+       cy="290.64999"
+       cx="6.3499999"
+       id="circle832"
+       style="fill:#ffccaa;fill-opacity:1;stroke:none;stroke-width:1.27085054;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       style="fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:0.13376606;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 5.6500001,285.03028 h 1.4 v 5.61971 h -1.4 z"
+       id="rect835"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="indicator" />
+  </g>
+</svg>

@@ -14,3 +14,21 @@ struct RoundLargeBlackSnapKnob: RoundLargeBlackKnob {
 		snap = true;
 	}
 };
+
+struct CHMRoundLargeKnob : RoundKnob {
+	CHMRoundLargeKnob() {
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CHMRoundLargeKnob.svg")));
+	}
+};
+
+struct CHMRoundLargeSnapKnob : CHMRoundLargeKnob {
+	CHMRoundLargeSnapKnob() {
+		snap = true;
+	}
+};
+
+struct CHMRoundSmallKnob : RoundKnob {
+	CHMRoundSmallKnob() {
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CHMRoundSmallKnob.svg")));
+	}
+};
