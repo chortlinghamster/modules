@@ -25,6 +25,7 @@ struct Bitwise : Module {
 		ROW_SELECT_CV_ATN_PARAM,
 		PATTERN_SELECT_PARAM,
 		PATTERN_SELECT_CV_ATN_PARAM,
+		GLOBAL_VOLTAGE_ATTENUATOR_PARAM,
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -217,6 +218,9 @@ struct Bitwise : Module {
 	// This will hold the value of the selected pattern.
 	int pattern = 0;
 
+	// This will hold the value of the global voltage out attenuator.
+	float globalAttenuatorVoltage = 0.f;
+
 	// This will hold the values of the main input voltages.
 	float inputVoltage[numberOfColumns] = {0.f};
 
@@ -246,6 +250,9 @@ struct Bitwise : Module {
 		// Configure the pattern select parameter knobs.
 		configParam(PATTERN_SELECT_PARAM, 1.f, (float)numberOfPatterns, 1.f, "Pattern select");
 		configParam(PATTERN_SELECT_CV_ATN_PARAM, 0.f, 1.f, 0.f, "Pattern select CV attenuator");
+
+		// Configure the global out attenuator parameter knob.
+		configParam(GLOBAL_VOLTAGE_ATTENUATOR_PARAM, 0.f, 1.f, 1.f, "Global voltage output attenuator");
 	}
 
 
@@ -288,6 +295,9 @@ struct Bitwise : Module {
 			: params[PATTERN_SELECT_PARAM].getValue();
 
 		// Remember, row and pattern are integers, so the float returned from setSelection() has its fractional part removed. Ouch!
+
+		// Get the value of global voltage out attenuator.
+		globalAttenuatorVoltage = params[GLOBAL_VOLTAGE_ATTENUATOR_PARAM].getValue();
 
 		// Set the pattern indicator lights' brightnesses. This was really hard to figure out and I hope you feel guilty.
 		for (int i = 0; i < numberOfPatternSlots; i++) {
@@ -348,11 +358,11 @@ struct Bitwise : Module {
 
 			// Set the output voltage, if a cable is connected.
 			if (outputs[OUT_VOLTAGE + i].isConnected())
-				outputs[OUT_VOLTAGE + i].setVoltage(inputVoltage[i]);
+				outputs[OUT_VOLTAGE + i].setVoltage(inputVoltage[i] * globalAttenuatorVoltage);
 
 			// Set the polyphonic output voltage, if a cable is connected.
 			if (outputs[POLYPHONIC_OUT_OUTPUT].isConnected())
-				outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(inputVoltage[i], i);
+				outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(inputVoltage[i] * globalAttenuatorVoltage, i);
 
 			// Set the pulse output for the current column, if a cable is connected.
 			if (outputs[OUT_PULSE + i].isConnected())
@@ -385,23 +395,24 @@ struct BitwiseWidget : ModuleWidget {
 		addChild(createWidget<ScrewBlack>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
 		// Knobbly knobs!
-		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(19.42, 23.785)), module, Bitwise::ROW_SELECT_PARAM));
-		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(51.7, 23.785)), module, Bitwise::PATTERN_SELECT_PARAM));
-		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(6.456, 35.871)), module, Bitwise::ROW_SELECT_CV_ATN_PARAM));
-		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(64.664, 35.871)), module, Bitwise::PATTERN_SELECT_CV_ATN_PARAM));
+		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(14.024, 18.566)), module, Bitwise::ROW_SELECT_PARAM));
+		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(58.486, 18.566)), module, Bitwise::PATTERN_SELECT_PARAM));
+		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(14.024, 42.823)), module, Bitwise::ROW_SELECT_CV_ATN_PARAM));
+		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(58.486, 42.823)), module, Bitwise::PATTERN_SELECT_CV_ATN_PARAM));
+		addParam(createParamCentered<CHMRoundLargeKnob>(mm2px(Vec(35.56, 117.335)), module, Bitwise::GLOBAL_VOLTAGE_ATTENUATOR_PARAM));
 
 		// Inputs!
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 23.785)), module, Bitwise::ROW_SELECT_CV_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 23.785)), module, Bitwise::PATTERN_SELECT_CV_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 72.647)), module, Bitwise::IN_VOLTAGE + 0));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 72.647)), module, Bitwise::IN_VOLTAGE + 1));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 72.647)), module, Bitwise::IN_VOLTAGE + 2));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 72.647)), module, Bitwise::IN_VOLTAGE + 3));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 85.779)), module, Bitwise::IN_TRIGGER + 0));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 85.779)), module, Bitwise::IN_TRIGGER + 1));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(35.56, 85.779)), module, Bitwise::TRIGGER_ALL_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 85.779)), module, Bitwise::IN_TRIGGER + 2));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 85.779)), module, Bitwise::IN_TRIGGER + 3));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(14.024, 31.869)), module, Bitwise::ROW_SELECT_CV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(58.486, 31.869)), module, Bitwise::PATTERN_SELECT_CV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 70.53)), module, Bitwise::IN_VOLTAGE + 0));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 70.53)), module, Bitwise::IN_VOLTAGE + 1));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 70.53)), module, Bitwise::IN_VOLTAGE + 2));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 70.53)), module, Bitwise::IN_VOLTAGE + 3));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 84.192)), module, Bitwise::IN_TRIGGER + 0));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 84.192)), module, Bitwise::IN_TRIGGER + 1));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(35.56, 84.192)), module, Bitwise::TRIGGER_ALL_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 84.192)), module, Bitwise::IN_TRIGGER + 2));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 84.192)), module, Bitwise::IN_TRIGGER + 3));
 
 		// Outputs!
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 102.086)), module, Bitwise::OUT_VOLTAGE + 0));
@@ -409,10 +420,10 @@ struct BitwiseWidget : ModuleWidget {
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35.56, 102.086)), module, Bitwise::POLYPHONIC_OUT_OUTPUT));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 102.086)), module, Bitwise::OUT_VOLTAGE + 2));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 102.086)), module, Bitwise::OUT_VOLTAGE + 3));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 115.218)), module, Bitwise::OUT_PULSE + 0));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 115.218)), module, Bitwise::OUT_PULSE + 1));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 115.218)), module, Bitwise::OUT_PULSE + 2));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 115.218)), module, Bitwise::OUT_PULSE + 3));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 117.335)), module, Bitwise::OUT_PULSE + 0));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 117.335)), module, Bitwise::OUT_PULSE + 1));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 117.335)), module, Bitwise::OUT_PULSE + 2));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 117.335)), module, Bitwise::OUT_PULSE + 3));
 
 		// (Shake it all about puts!)
 
@@ -481,14 +492,14 @@ struct BitwiseWidget : ModuleWidget {
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 58.004)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 61));
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 58.004)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 62));
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(40.589, 58.004)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 63));
-		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(6.456, 60.253)), module, Bitwise::ACTIVE_LIGHT + 0));
-		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(21.008, 60.253)), module, Bitwise::ACTIVE_LIGHT + 1));
-		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(50.112, 60.253)), module, Bitwise::ACTIVE_LIGHT + 2));
-		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(64.664, 60.253)), module, Bitwise::ACTIVE_LIGHT + 3));
-		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(6.456, 123.232)), module, Bitwise::PULSE_LIGHT + 0));
-		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(21.008, 123.232)), module, Bitwise::PULSE_LIGHT + 1));
-		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(50.112, 123.232)), module, Bitwise::PULSE_LIGHT + 2));
-		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(64.664, 123.232)), module, Bitwise::PULSE_LIGHT + 3));
+		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(6.456, 58.665)), module, Bitwise::ACTIVE_LIGHT + 0));
+		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(21.008, 58.665)), module, Bitwise::ACTIVE_LIGHT + 1));
+		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(50.112, 58.665)), module, Bitwise::ACTIVE_LIGHT + 2));
+		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(64.664, 58.665)), module, Bitwise::ACTIVE_LIGHT + 3));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(6.456, 123.761)), module, Bitwise::PULSE_LIGHT + 0));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(21.008, 123.761)), module, Bitwise::PULSE_LIGHT + 1));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(50.112, 123.761)), module, Bitwise::PULSE_LIGHT + 2));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(64.664, 123.761)), module, Bitwise::PULSE_LIGHT + 3));
 	}
 };
 
