@@ -415,11 +415,11 @@ struct BitwiseWidget : ModuleWidget {
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(64.664, 84.192)), module, Bitwise::IN_TRIGGER + 3));
 
 		// Outputs!
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 102.086)), module, Bitwise::OUT_VOLTAGE + 0));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 102.086)), module, Bitwise::OUT_VOLTAGE + 1));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35.56, 102.086)), module, Bitwise::POLYPHONIC_OUT_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 102.086)), module, Bitwise::OUT_VOLTAGE + 2));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 102.086)), module, Bitwise::OUT_VOLTAGE + 3));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 100.499)), module, Bitwise::OUT_VOLTAGE + 0));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 100.499)), module, Bitwise::OUT_VOLTAGE + 1));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(35.56, 100.499)), module, Bitwise::POLYPHONIC_OUT_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 100.499)), module, Bitwise::OUT_VOLTAGE + 2));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(64.664, 100.499)), module, Bitwise::OUT_VOLTAGE + 3));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(6.456, 117.335)), module, Bitwise::OUT_PULSE + 0));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(21.008, 117.335)), module, Bitwise::OUT_PULSE + 1));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.112, 117.335)), module, Bitwise::OUT_PULSE + 2));
