@@ -17,7 +17,6 @@ static int setSelection(float val, float cv, float attn, float max)
 	);
 }
 
-
 // Button up your overcoat, because here we go!
 struct Bitwise : Module {
 	enum ParamIds {
@@ -229,6 +228,7 @@ struct Bitwise : Module {
 
 	// Are there any descriptive variable names in the house?
 	bool hasTriggerAllBeenTriggered = false;
+	bool isPolyphonicOutCableConnected = false;
 
 	// Here are some Schmitt Triggers which we will use to check when trigger inputs are triggered.
 	// 0 to 3: trig inputs.
@@ -326,6 +326,9 @@ struct Bitwise : Module {
 		// Note to self. We do this OUTSIDE the loop below, otherwise the Schmitt Trigger gets reset after the first loop interation and only the first sample and hold circuit works when trigger all is fired. You doofus!
 		hasTriggerAllBeenTriggered = triggers[4].process(inputs[TRIGGER_ALL_INPUT].getVoltage() / 0.7);
 
+		// Check if a cable is attached to the polyphonic voltage output port.
+		isPolyphonicOutCableConnected = outputs[POLYPHONIC_OUT_OUTPUT].isConnected();
+
 		// Loop through the four sample and hold columns (circuits, things, whatevs) and do stuff to them. Nasty, evil stuff. Muahahahaaa! The knuckles! The horrible knuckles!
 		for (int i = 0; i < numberOfColumns; i++) {
 
@@ -361,7 +364,7 @@ struct Bitwise : Module {
 				outputs[OUT_VOLTAGE + i].setVoltage(inputVoltage[i] * globalAttenuatorVoltage);
 
 			// Set the polyphonic output voltage, if a cable is connected.
-			if (outputs[POLYPHONIC_OUT_OUTPUT].isConnected())
+			if (isPolyphonicOutCableConnected)
 				outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(inputVoltage[i] * globalAttenuatorVoltage, i);
 
 			// Set the pulse output for the current column, if a cable is connected.
@@ -374,7 +377,7 @@ struct Bitwise : Module {
 		} // End of do stuff on the columns for loop.
 
 		// Set polyphonic output channels, if a cable is connected.
-		if (outputs[POLYPHONIC_OUT_OUTPUT].isConnected())
+		if (isPolyphonicOutCableConnected)
 			outputs[POLYPHONIC_OUT_OUTPUT].setChannels(numberOfColumns);
 
 	} // End of process() function.
