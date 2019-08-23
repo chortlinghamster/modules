@@ -332,6 +332,8 @@ struct Bitwise : Module {
 		// Loop through the four sample and hold columns (circuits, things, whatevs) and do stuff to them. Nasty, evil stuff. Muahahahaaa! The knuckles! The horrible knuckles!
 		for (int i = 0; i < numberOfColumns; i++) {
 
+			float outputVoltage = inputVoltage[i] * globalAttenuatorVoltage;
+
 			// Is the current column selected in the pattern? Questions, questions.
 			isTheCurrentColumnSelected = patterns[pattern - 1][((row - 1) * numberOfColumns) + i];
 
@@ -339,33 +341,45 @@ struct Bitwise : Module {
 			lights[i].setBrightness((isTheCurrentColumnSelected) ? 1.f : 0.f);
 
 			// Here's the crazy logic which decides if a sample and hold column is triggered. If you can make it better I will buy you a bag of Jelly Tots. Note that individual trigger inputs take priority over the trigger all input.
-			if (
-				// Do the sample and hold if the current column's trigger in port is connected, and it's been triggered.
-				(inputs[IN_TRIGGER + i].isConnected() && triggers[i].process(inputs[IN_TRIGGER + i].getVoltage() / 0.7) && isTheCurrentColumnSelected)
+			if (isTheCurrentColumnSelected) {
+				// The current column is indeed selected.
+				if (
+					// Do the sample and hold if the current column's trigger in port is connected, and it's been triggered.
+					(
+						inputs[IN_TRIGGER + i].isConnected()
+						&& triggers[i].process(inputs[IN_TRIGGER + i].getVoltage() / 0.7)
+						// && isTheCurrentColumnSelected
+					)
 
-				// OR!
-				||
+					// OR!
+					||
 
-				// Do the sample and hold if the current column's trigger in port isn't connected, but the trigger all in port is, and the trigger all in port has been, er, triggered.
-				(!inputs[IN_TRIGGER + i].isConnected() && inputs[TRIGGER_ALL_INPUT].isConnected() && hasTriggerAllBeenTriggered && isTheCurrentColumnSelected)
-			) {
-				// Capture the current column's input voltage.
-				inputVoltage[i] = inputs[i].getVoltage();
+					// Do the sample and hold if the current column's trigger in port isn't connected, but the trigger all in port is, and the trigger all in port has been, er, triggered.
+					(
+						!inputs[IN_TRIGGER + i].isConnected()
+						&& inputs[TRIGGER_ALL_INPUT].isConnected()
+						&& hasTriggerAllBeenTriggered
+						// && isTheCurrentColumnSelected
+					)
+				) {
+					// Capture the current column's input voltage.
+					inputVoltage[i] = inputs[i].getVoltage();
 
-				// Pulse the output voltage for this column.
-				pulses[i].trigger(1e-3f);
+					// Pulse the output voltage for this column.
+					pulses[i].trigger(1e-3f);
 
-				// Pulse the output light for this column.
-				pulses[4 + i].trigger(1e-1f);
-			}
+					// Pulse the output light for this column.
+					pulses[4 + i].trigger(1e-1f);
+				} // End of if ... sample and hold check.
+			} // End of if ... current column selected check.
 
 			// Set the output voltage, if a cable is connected.
 			if (outputs[OUT_VOLTAGE + i].isConnected())
-				outputs[OUT_VOLTAGE + i].setVoltage(inputVoltage[i] * globalAttenuatorVoltage);
+				outputs[OUT_VOLTAGE + i].setVoltage(outputVoltage);
 
 			// Set the polyphonic output voltage, if a cable is connected.
 			if (isPolyphonicOutCableConnected)
-				outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(inputVoltage[i] * globalAttenuatorVoltage, i);
+				outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(outputVoltage, i);
 
 			// Set the pulse output for the current column, if a cable is connected.
 			if (outputs[OUT_PULSE + i].isConnected())
