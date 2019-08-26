@@ -1,14 +1,14 @@
 {
   "slug": "ChortlingHamsterModules",
   "name": "Chortling Hamster Modules",
-  "version": "1.1.0beta2",
+  "version": "1.1.0",
   "license": "BSD-3-Clause-Clear",
   "brand": "Chortling Hamster Modules",
   "author": "Alan Holding",
   "authorEmail": "alanholding@me.com",
-  "authorUrl": "",
-  "pluginUrl": "https://github.com/chortlinghamster/modules/blob/master/README.md",
-  "manualUrl": "",
+  "authorUrl": "https://github.com/chortlinghamster",
+  "pluginUrl": "https://github.com/chortlinghamster/modules",
+  "manualUrl": "https://github.com/chortlinghamster/modules/blob/master/README.md",
   "sourceUrl": "https://github.com/chortlinghamster/modules",
   "donateUrl": "",
   "modules": [
@@ -23,7 +23,7 @@
     {
       "slug": "Bitwise",
       "name": "Bitwise",
-      "description": "Bitwise pattern selector",
+      "description": "Bitwise is four sample and hold circuits whose triggers can be affected by CV controlled patterns.",
       "tags": [
         "Polyphonic, Sample and hold, Utility"
       ]

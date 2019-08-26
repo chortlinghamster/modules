@@ -1,15 +1,16 @@
 {
-  "version": "1.1.3",
+  "version": "1.1.4",
   "modules": [
     {
       "id": 0,
       "plugin": "Core",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "model": "AudioInterface",
       "params": [],
       "data": {
         "audio": {
           "driver": 5,
+          "deviceName": "Apple Inc.: MacBook Pro Speakers",
           "offset": 0,
           "maxChannels": 8,
           "sampleRate": 44100,
@@ -24,7 +25,7 @@
     {
       "id": 1,
       "plugin": "Fundamental",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "model": "VCO",
       "params": [
         {
@@ -64,7 +65,7 @@
     {
       "id": 2,
       "plugin": "Fundamental",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "model": "LFO",
       "params": [
         {
@@ -104,7 +105,7 @@
     {
       "id": 3,
       "plugin": "Fundamental",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "model": "LFO",
       "params": [
         {
@@ -144,7 +145,7 @@
     {
       "id": 4,
       "plugin": "ChortlingHamsterModules",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "model": "Pop",
       "params": [],
       "pos": [
@@ -155,7 +156,7 @@
     {
       "id": 5,
       "plugin": "Fundamental",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "model": "VCMixer",
       "params": [
         {
@@ -187,7 +188,7 @@
     {
       "id": 6,
       "plugin": "Fundamental",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "model": "8vert",
       "params": [
         {
