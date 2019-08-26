@@ -258,6 +258,8 @@ struct Bitwise : Module {
 
 	void process(const ProcessArgs &args) override {
 
+		// Remember, row and pattern are integers, so the floats returned from setSelection() have their fractional parts removed. Ouch!
+
 		// Set the current row, using an arcane spell involving the row select parameter value, row select CV input voltage, row select CV input voltage attenuator, fresh garlic and a thermal blanket. Crikey!
 		row = (inputs[ROW_SELECT_CV_INPUT].isConnected())
 			? setSelection(
@@ -273,7 +275,7 @@ struct Bitwise : Module {
 				// The number of rows in the pattern. Cast to a float for reasons.
 				(float)numberOfRows
 			)
-			// The CV input doesn't have a cable attached, so just use the value of the row select knob.
+			// The row select CV input doesn't have a cable attached, so just use the value of the row select knob.
 			: params[ROW_SELECT_PARAM].getValue();
 
 		// Set the pattern select value, just like we did with the row selection. Only different!
@@ -291,10 +293,15 @@ struct Bitwise : Module {
 				// The number of patterns. Cast to a float for reasons.
 				(float)numberOfPatterns
 			)
-			// The CV input doesn't have a cable attached, so just use the value of the pattern select knob.
+			// The pattern select CV input doesn't have a cable attached, so just use the value of the pattern select knob.
 			: params[PATTERN_SELECT_PARAM].getValue();
 
-		// Remember, row and pattern are integers, so the float returned from setSelection() has its fractional part removed. Ouch!
+		// Check the trigger all input to see if it has triggered.
+		// Note to self. We do this OUTSIDE the loop below, otherwise the Schmitt Trigger gets reset after the first loop interation and only the first sample and hold circuit works when trigger all is fired. You doofus!
+		hasTriggerAllBeenTriggered = triggers[4].process(inputs[TRIGGER_ALL_INPUT].getVoltage() / 0.7);
+
+		// Check if a cable is attached to the polyphonic voltage output port.
+		isPolyphonicOutCableConnected = outputs[POLYPHONIC_OUT_OUTPUT].isConnected();
 
 		// Get the value of global voltage out attenuator.
 		globalAttenuatorVoltage = params[GLOBAL_VOLTAGE_ATTENUATOR_PARAM].getValue();
@@ -320,19 +327,11 @@ struct Bitwise : Module {
 				: 0.f
 
 			); // End of setBrightness().
+
 		} // End of pattern indicator lights for loop.
-
-		// Check the trigger all input to see if it has triggered.
-		// Note to self. We do this OUTSIDE the loop below, otherwise the Schmitt Trigger gets reset after the first loop interation and only the first sample and hold circuit works when trigger all is fired. You doofus!
-		hasTriggerAllBeenTriggered = triggers[4].process(inputs[TRIGGER_ALL_INPUT].getVoltage() / 0.7);
-
-		// Check if a cable is attached to the polyphonic voltage output port.
-		isPolyphonicOutCableConnected = outputs[POLYPHONIC_OUT_OUTPUT].isConnected();
 
 		// Loop through the four sample and hold columns (circuits, things, whatevs) and do stuff to them. Nasty, evil stuff. Muahahahaaa! The knuckles! The horrible knuckles!
 		for (int i = 0; i < numberOfColumns; i++) {
-
-			float outputVoltage = inputVoltage[i] * globalAttenuatorVoltage;
 
 			// Is the current column selected in the pattern? Questions, questions.
 			isTheCurrentColumnSelected = patterns[pattern - 1][((row - 1) * numberOfColumns) + i];
@@ -348,7 +347,6 @@ struct Bitwise : Module {
 					(
 						inputs[IN_TRIGGER + i].isConnected()
 						&& triggers[i].process(inputs[IN_TRIGGER + i].getVoltage() / 0.7)
-						// && isTheCurrentColumnSelected
 					)
 
 					// OR!
@@ -359,7 +357,6 @@ struct Bitwise : Module {
 						!inputs[IN_TRIGGER + i].isConnected()
 						&& inputs[TRIGGER_ALL_INPUT].isConnected()
 						&& hasTriggerAllBeenTriggered
-						// && isTheCurrentColumnSelected
 					)
 				) {
 					// Capture the current column's input voltage.
@@ -375,11 +372,11 @@ struct Bitwise : Module {
 
 			// Set the output voltage, if a cable is connected.
 			if (outputs[OUT_VOLTAGE + i].isConnected())
-				outputs[OUT_VOLTAGE + i].setVoltage(outputVoltage);
+				outputs[OUT_VOLTAGE + i].setVoltage(inputVoltage[i] * globalAttenuatorVoltage);
 
 			// Set the polyphonic output voltage, if a cable is connected.
 			if (isPolyphonicOutCableConnected)
-				outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(outputVoltage, i);
+				outputs[POLYPHONIC_OUT_OUTPUT].setVoltage(inputVoltage[i] * globalAttenuatorVoltage, i);
 
 			// Set the pulse output for the current column, if a cable is connected.
 			if (outputs[OUT_PULSE + i].isConnected())
