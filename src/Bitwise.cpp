@@ -403,21 +403,25 @@ struct BitwiseWidget : ModuleWidget {
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/Bitwise.svg")));
 
 		// Screwy screws!
-		addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH * 2, 0)));
-		addChild(createWidget<ScrewBlack>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, 0)));
-		addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH * 2, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-		addChild(createWidget<ScrewBlack>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<ScrewBlack>(Vec(0, 0)));
+		addChild(createWidget<ScrewBlack>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<ScrewBlack>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<ScrewBlack>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		// addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH * 2, 0)));
+		// addChild(createWidget<ScrewBlack>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, 0)));
+		// addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH * 2, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		// addChild(createWidget<ScrewBlack>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
 		// Knobbly knobs!
-		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(14.024, 18.566)), module, Bitwise::ROW_SELECT_PARAM));
-		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(58.486, 18.566)), module, Bitwise::PATTERN_SELECT_PARAM));
-		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(14.024, 42.823)), module, Bitwise::ROW_SELECT_CV_ATN_PARAM));
-		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(58.486, 42.823)), module, Bitwise::PATTERN_SELECT_CV_ATN_PARAM));
+		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(14.024, 25.951)), module, Bitwise::ROW_SELECT_PARAM));
+		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(57.388, 25.951)), module, Bitwise::PATTERN_SELECT_PARAM));
+		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(14.024, 48.313)), module, Bitwise::ROW_SELECT_CV_ATN_PARAM));
+		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(57.388, 48.313)), module, Bitwise::PATTERN_SELECT_CV_ATN_PARAM));
 		addParam(createParamCentered<CHMRoundLargeKnob>(mm2px(Vec(35.56, 117.335)), module, Bitwise::GLOBAL_VOLTAGE_ATTENUATOR_PARAM));
 
 		// Inputs!
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(14.024, 31.869)), module, Bitwise::ROW_SELECT_CV_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(58.486, 31.869)), module, Bitwise::PATTERN_SELECT_CV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(14.024, 38.307)), module, Bitwise::ROW_SELECT_CV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(57.388, 38.307)), module, Bitwise::PATTERN_SELECT_CV_INPUT));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.456, 70.53)), module, Bitwise::IN_VOLTAGE + 0));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(21.008, 70.53)), module, Bitwise::IN_VOLTAGE + 1));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.112, 70.53)), module, Bitwise::IN_VOLTAGE + 2));

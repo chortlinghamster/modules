@@ -25,7 +25,8 @@
       "name": "Bitwise",
       "description": "Bitwise is four sample and hold circuits whose triggers can be affected by CV controlled patterns.",
       "tags": [
-        "Polyphonic", "Sample and hold"
+        "Polyphonic",
+        "Sample and hold"
       ]
     }
   ]
