@@ -48,6 +48,8 @@ Bitwise has eight preset patterns, which you can select using the Pattern Select
 
 You can select which row in the current pattern is selected using the Row Select knob and, as with the pattern selection, you can control which row is selected by CV.
 
+The number of the selected row and pattern you have selected is displayed above their respective parameter knobs. Note that this is the number _after_ any CV has been applied.
+
 If a trigger is fired when a sample and hold "column" is "active" in the current pattern's row, indicated by the ACTIVE light showing red, the trigger will be "let through" and the sample and hold function will be carried out.
 
 So, [trigger in] + [column is active] = [sample and hold done].

@@ -1,16 +1,15 @@
 {
-  "version": "1.1.4",
+  "version": "1.1.5",
   "modules": [
     {
       "id": 7,
       "plugin": "Core",
-      "version": "1.1.4",
+      "version": "1.1.5",
       "model": "AudioInterface",
       "params": [],
       "data": {
         "audio": {
           "driver": 5,
-          "deviceName": "Apple Inc.: External Headphones",
           "offset": 0,
           "maxChannels": 8,
           "sampleRate": 44100,
@@ -25,7 +24,7 @@
     {
       "id": 9,
       "plugin": "ChortlingHamsterModules",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "model": "Bitwise",
       "params": [
         {
