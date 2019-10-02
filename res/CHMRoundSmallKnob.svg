@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="8mm"
-   height="8mm"
-   viewBox="0 0 8.0000001 8.0000001"
+   width="5mm"
+   height="5mm"
+   viewBox="0 0 5.0000001 5.0000001"
    version="1.1"
    id="svg980"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    sodipodi:docname="CHMRoundSmallKnob.svg">
   <defs
      id="defs974" />
@@ -26,16 +26,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="14.485938"
-     inkscape:cx="15.11811"
+     inkscape:cx="6.5580844"
      inkscape:cy="15.11811"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:showpageshadow="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1132"
+     inkscape:window-width="1280"
+     inkscape:window-height="712"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="1"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata977">
@@ -53,23 +53,23 @@
      inkscape:label="knob"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-289)">
+     transform="translate(0,-292)">
     <path
-       style="fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:1.04274929;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 4.0000001,289 A 4.0000001,4.0000001 0 0 0 -1.4106298e-8,293 4.0000001,4.0000001 0 0 0 4.0000001,297 a 4.0000001,4.0000001 0 0 0 4,-4 4.0000001,4.0000001 0 0 0 -4,-4 z m 0,0.92904 A 3.0708662,3.0708662 0 0 1 7.0709636,293 3.0708662,3.0708662 0 0 1 4.0000001,296.07096 3.0708662,3.0708662 0 0 1 0.92903647,293 3.0708662,3.0708662 0 0 1 4.0000001,289.92904 Z"
+       style="fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:0.65171826;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 2.5,292 A 2.5,2.5 0 0 0 -1.4106298e-8,294.5 2.5,2.5 0 0 0 2.5,297 2.5,2.5 0 0 0 5,294.5 2.5,2.5 0 0 0 2.5,292 Z m 0,0.58065 A 1.9192913,1.9192913 0 0 1 4.4193522,294.5 1.9192913,1.9192913 0 0 1 2.5,296.41935 1.9192913,1.9192913 0 0 1 0.58064778,294.5 1.9192913,1.9192913 0 0 1 2.5,292.58065 Z"
        id="path1525"
        inkscape:connector-curvature="0"
        inkscape:label="outer" />
     <circle
-       r="3.0708661"
+       r="1.9192913"
        inkscape:label="inner"
-       cy="293"
-       cx="4"
+       cy="294.5"
+       cx="2.5"
        id="circle832"
-       style="fill:#ffccaa;fill-opacity:1;stroke:none;stroke-width:0.8005358;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="fill:#ffccaa;fill-opacity:1;stroke:none;stroke-width:0.50033486;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
-       style="fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:0.08426208;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 3.5590552,289.46002 H 4.440945 v 3.53997 H 3.5590552 Z"
+       style="fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:0.0526638;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 2.2244095,292.28752 h 0.5511811 v 2.21247 H 2.2244095 Z"
        id="rect835"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"

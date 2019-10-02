@@ -13,3 +13,9 @@ More information at <https://www.theleagueofmoveabletype.com/sniglet>.
 Francois One is used for the port and parameter labels.
 
 More information at <https://github.com/vernnobile/Francois>.
+
+## DSEG
+
+DSEG is used for the "calculator style" number displays.
+
+More information at <https://github.com/keshikan/DSEG>.

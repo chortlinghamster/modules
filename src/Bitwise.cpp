@@ -213,9 +213,11 @@ struct Bitwise : Module {
 
 	// This will hold the value of the selected row.
 	int row = 0;
+	int oldRow = 0;
 
 	// This will hold the value of the selected pattern.
 	int pattern = 0;
+	int oldPattern = 0;
 
 	// This will hold the value of the global voltage out attenuator.
 	float globalAttenuatorVoltage = 0.f;
@@ -239,6 +241,9 @@ struct Bitwise : Module {
 	// 0 to 3: pulse output voltages.
 	// 4 to 7: pulse output lights.
 	dsp::PulseGenerator pulses[8];
+
+	// Dirty drawing flag. Harumph!
+	bool dirty = false;
 
 	Bitwise() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -278,6 +283,12 @@ struct Bitwise : Module {
 			// The row select CV input doesn't have a cable attached, so just use the value of the row select knob.
 			: params[ROW_SELECT_PARAM].getValue();
 
+		// Flag that the front panel needs repainting.
+		if (row != oldRow)
+			dirty = true;
+		oldRow = row;
+
+
 		// Set the pattern select value, just like we did with the row selection. Only different!
 		pattern = (inputs[PATTERN_SELECT_CV_INPUT].isConnected())
 			? setSelection(
@@ -295,6 +306,11 @@ struct Bitwise : Module {
 			)
 			// The pattern select CV input doesn't have a cable attached, so just use the value of the pattern select knob.
 			: params[PATTERN_SELECT_PARAM].getValue();
+
+		// Flag that the front panel needs repainting.
+		if (pattern != oldPattern)
+			dirty = true;
+		oldPattern = pattern;
 
 		// Check the trigger all input to see if it has triggered.
 		// Note to self. We do this OUTSIDE the loop below, otherwise the Schmitt Trigger gets reset after the first loop interation and only the first sample and hold circuit works when trigger all is fired. You doofus!
@@ -398,25 +414,83 @@ struct Bitwise : Module {
 
 // Oh, yeah. The widget. Here it comes! Look busy!
 struct BitwiseWidget : ModuleWidget {
+
+	// Contains the segment displays and should only repaint itself when it's dirty. Ewww!
+	// Tip o' th' hat to https://community.vcvrack.com/t/framebufferwidget-question/3041.
+	struct SegmentDisplayWidgetBuffer : FramebufferWidget{
+		Bitwise *module;
+		SegmentDisplayWidgetBuffer(Bitwise *m){
+			module = m;
+		}
+		void step() override{
+			if(module->dirty) {
+				FramebufferWidget::dirty = true;
+				module->dirty = false;
+			}
+			FramebufferWidget::step();
+		}
+	};
+
+	// Generic segment display.
+	// Thanks to Impromptu Modular as I reviewed the Clocked code to help me to understand how to create the segment display widget.
+	struct SegmentDisplayWidget : TransparentWidget{
+		Bitwise *module;
+		std::shared_ptr<Font> font;
+		int *valueToDisplay;
+		Vec textOffset;
+
+		SegmentDisplayWidget(Bitwise *m, Vec pos, Vec size, Vec to, int *v){
+			module = m;
+			textOffset = to;
+			valueToDisplay = v;
+
+			box.pos = mm2px(Vec(pos.x, pos.y));
+			box.size = mm2px(Vec(size.x, size.y));
+			font = APP->window->loadFont(asset::plugin(pluginInstance, "res/fonts/dseg7-modern/DSEG7Modern-BoldItalic.ttf"));
+		}
+
+		void draw(const DrawArgs &args) override {
+			nvgBeginPath(args.vg);
+			nvgFontFaceId(args.vg, font->handle);
+			nvgFontSize(args.vg, 16);
+		    nvgTextAlign(args.vg, NVG_ALIGN_TOP | NVG_ALIGN_RIGHT);
+			nvgFillColor(args.vg, nvgRGB(200, 200, 10));
+			// A little jig here to convert the int value to a string. See also the use of c_str() in the next line.
+			std::string valueAsString = std::to_string(*valueToDisplay);
+			nvgText(args.vg, mm2px(textOffset.x), mm2px(textOffset.y), valueAsString.c_str(), NULL);
+		}
+	};
+
 	BitwiseWidget(Bitwise *module) {
 		setModule(module);
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/Bitwise.svg")));
+
+		// Using if (module) stops Rack crashing when it tries to render a preview of the front panel in the module browser, as the segment displays don't have any values to render in the module browser.
+		if (module) {
+			// Create the widget buffer which will contain the segment display widgets for the row and pattern selection values.
+			SegmentDisplayWidgetBuffer *segmentDisplays = new SegmentDisplayWidgetBuffer(module);
+			// Create the segement display widget for the row value.
+			SegmentDisplayWidget *rowSegmentDisplay = new SegmentDisplayWidget(module, Vec(7.674, 10.659), Vec(12.7, 7.114), Vec(9.75, 0.85), &module->row);
+			// Create the segement display widget for the pattern value.
+			SegmentDisplayWidget *patternSegmentDisplay = new SegmentDisplayWidget(module, Vec(51.038, 10.659), Vec(12.7, 7.114), Vec(8.75, 0.85), &module->pattern);
+			// Add the segment display widgets to the buffer widget.
+			segmentDisplays->addChild(rowSegmentDisplay);
+			segmentDisplays->addChild(patternSegmentDisplay);
+			// Add the buffer widget to the main module widget.
+			addChild(segmentDisplays);
+		}
 
 		// Screwy screws!
 		addChild(createWidget<ScrewBlack>(Vec(0, 0)));
 		addChild(createWidget<ScrewBlack>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
 		addChild(createWidget<ScrewBlack>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<ScrewBlack>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-		// addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH * 2, 0)));
-		// addChild(createWidget<ScrewBlack>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, 0)));
-		// addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH * 2, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-		// addChild(createWidget<ScrewBlack>(Vec(box.size.x - 3 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
 		// Knobbly knobs!
 		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(14.024, 25.951)), module, Bitwise::ROW_SELECT_PARAM));
 		addParam(createParamCentered<CHMRoundLargeSnapKnob>(mm2px(Vec(57.388, 25.951)), module, Bitwise::PATTERN_SELECT_PARAM));
-		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(14.024, 48.313)), module, Bitwise::ROW_SELECT_CV_ATN_PARAM));
-		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(57.388, 48.313)), module, Bitwise::PATTERN_SELECT_CV_ATN_PARAM));
+		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(6.456, 38.307)), module, Bitwise::ROW_SELECT_CV_ATN_PARAM));
+		addParam(createParamCentered<CHMRoundSmallKnob>(mm2px(Vec(64.664, 38.307)), module, Bitwise::PATTERN_SELECT_CV_ATN_PARAM));
 		addParam(createParamCentered<CHMRoundLargeKnob>(mm2px(Vec(35.56, 117.335)), module, Bitwise::GLOBAL_VOLTAGE_ATTENUATOR_PARAM));
 
 		// Inputs!
@@ -446,6 +520,7 @@ struct BitwiseWidget : ModuleWidget {
 		// (Shake it all about puts!)
 
 		// Blinkenlights!
+		// @todo Replace all these lights with one custom widget.
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 0));
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(33.884, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 1));
 		addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(37.236, 8.946)), module, Bitwise::PATTERN_INDICATOR_LIGHT + 2));

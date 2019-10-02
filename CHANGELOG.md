@@ -4,6 +4,8 @@
 
 * Updates incorrect tags for Bitwise in JSON manifest. Oops!
 * Adds this CHANGELOG document. Which is a bit meta?
+* Adds "calculator style" segment displays to Bitwise front panel to show the values of the row and pattern parameters, and moves around the CV knobs.
+* Removes the "0 1" global attenuator label from Bitwise front panel. It was annoying me.
 
 ## v1.1.0
 
