@@ -1,5 +1,9 @@
 # Changelog for Chortling Hamster Modules
 
+## v1.1.2
+
+* Updates Bitwise code to use a custom NanoVG widget for the pattern display LEDs instead of 64 light components. Slight performance improvement.
+
 ## v1.1.1
 
 * Updates incorrect tags for Bitwise in JSON manifest. Oops!
