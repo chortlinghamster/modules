@@ -283,9 +283,10 @@ struct Bitwise : Module {
 			: params[ROW_SELECT_PARAM].getValue();
 
 		// Flag that the front panel needs repainting.
-		if (row != oldRow)
+		if (row != oldRow) {
 			dirtyPatternGrid = true;
 			dirtySegmentDisplay = true;
+		}
 		oldRow = row;
 
 
@@ -308,9 +309,10 @@ struct Bitwise : Module {
 			: params[PATTERN_SELECT_PARAM].getValue();
 
 		// Flag that the front panel needs repainting.
-		if (pattern != oldPattern)
+		if (pattern != oldPattern) {
 			dirtyPatternGrid = true;
 			dirtySegmentDisplay = true;
+		}
 		oldPattern = pattern;
 
 		// Check the trigger all input to see if it has triggered.
