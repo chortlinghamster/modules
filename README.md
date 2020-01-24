@@ -84,7 +84,7 @@ Bitwise also has a polyphonic output port. This outputs all four V.OUT values th
 
 ## Example patches
 
-You can find example patches for Pop and Bitwise in the the `res/patches` folder.
+You can find example patches for Pop and Bitwise in the `res/patches` folder.
 
 ## Having an issue over here!
 
