@@ -1,5 +1,9 @@
 # Changelog for Chortling Hamster Modules
 
+## v1.1.2.1
+
+* Updates source code license to [GNU General Public License v3.0](LICENSE-GPLv3.txt) and graphics license, excluding fonts, to [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/).
+
 ## v1.1.2
 
 * Updates Bitwise code to use a custom NanoVG widget for the pattern display LEDs instead of 64 light components. Slight performance improvement.
