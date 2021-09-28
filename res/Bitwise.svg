@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="Bitwise.svg"
-   inkscape:version="1.0beta2 (cdc1be5, 2019-12-07)"
+   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
    id="svg8"
    version="1.1"
    viewBox="0 0 71.120004 128.5"
    height="128.5mm"
-   width="71.120003mm">
+   width="71.120003mm"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2" />
   <sodipodi:namedview
      inkscape:document-rotation="0"
      showguides="false"
      inkscape:pagecheckerboard="true"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      inkscape:window-y="23"
      inkscape:window-x="0"
-     inkscape:window-height="712"
-     inkscape:window-width="1280"
+     inkscape:window-height="962"
+     inkscape:window-width="1680"
      inkscape:showpageshadow="false"
      showgrid="false"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
      inkscape:cy="242.83465"
-     inkscape:cx="134.40001"
-     inkscape:zoom="1.0377432"
+     inkscape:cx="-10.887966"
+     inkscape:zoom="1.5154345"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -175,7 +175,7 @@
        inkscape:connector-curvature="0" />
     <g
        inkscape:label="logo"
-       transform="matrix(0.05036065,0,0,0.050285,33.401615,222.8846)"
+       transform="matrix(0.05036065,0,0,0.050285,33.401615,226.68914)"
        id="g1070"
        style="display:inline">
       <path
@@ -465,17 +465,17 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:Sniglet;-inkscape-font-specification:'Sniglet, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#66dcfd;fill-opacity:1;stroke:none;stroke-width:0.264583" />
   </g>
   <g
-     sodipodi:insensitive="true"
      style="display:none"
      inkscape:label="components"
      id="layer2"
-     inkscape:groupmode="layer">
+     inkscape:groupmode="layer"
+     sodipodi:insensitive="true">
     <circle
        inkscape:label="GLOBAL_VOLTAGE_ATTENUATOR"
        r="6.3499999"
        cy="117.33514"
        cx="35.560154"
-       style="fill:#ff0000;stroke:none;stroke-width:0.19927886"
+       style="fill:#ff0000;stroke:none;stroke-width:0.199279"
        id="circle1463" />
     <circle
        inkscape:label="SLOT_PULSE_LIGHT4"
@@ -483,16 +483,16 @@
        cy="123.7613"
        cx="64.664337"
        id="circle1824"
-       style="display:inline;fill:#ff00ff;stroke:none;stroke-width:0.03414415" />
+       style="display:inline;fill:#ff00ff;stroke:none;stroke-width:0.0341441" />
     <circle
        inkscape:label="OUT4"
        r="4.178"
        cy="100.49878"
        cx="64.664337"
        id="circle1828"
-       style="display:inline;fill:#0000ff;stroke:none;stroke-width:0.13111606" />
+       style="display:inline;fill:#0000ff;stroke:none;stroke-width:0.131116" />
     <circle
-       style="display:inline;fill:#00ff00;stroke:none;stroke-width:0.13111606"
+       style="display:inline;fill:#00ff00;stroke:none;stroke-width:0.131116"
        id="circle1830"
        cx="64.664337"
        cy="84.191628"
@@ -504,37 +504,37 @@
        cy="70.530304"
        cx="64.664337"
        id="circle1832"
-       style="display:inline;fill:#00ff00;stroke:none;stroke-width:0.13111606" />
+       style="display:inline;fill:#00ff00;stroke:none;stroke-width:0.131116" />
     <circle
        r="2.5"
        id="circle920"
        inkscape:label="PATTERN_SELECT_CV_ATN"
        cy="38.306938"
        cx="64.664337"
-       style="fill:#ff0000;stroke:none;stroke-width:0.07845625" />
+       style="fill:#ff0000;stroke:none;stroke-width:0.0784563" />
     <circle
        id="circle918"
        r="4.1778102"
        cy="38.306938"
        cx="57.388283"
-       style="fill:#00ff00;stroke:none;stroke-width:0.13111012"
+       style="fill:#00ff00;stroke:none;stroke-width:0.13111"
        inkscape:label="PATTERN_SELECT_CV" />
     <circle
        id="circle916"
-       style="fill:#ff0000;stroke:none;stroke-width:0.19927886"
+       style="fill:#ff0000;stroke:none;stroke-width:0.199279"
        cx="57.388283"
        cy="25.950825"
        r="6.3499999"
        inkscape:label="PATTERN_SELECT" />
     <circle
-       style="fill:#ff00ff;stroke:none;stroke-width:0.03414415"
+       style="fill:#ff00ff;stroke:none;stroke-width:0.0341441"
        id="circle52"
        cx="50.112251"
        cy="123.7613"
        r="1.0879998"
        inkscape:label="SLOT_PULSE_LIGHT3" />
     <circle
-       style="fill:#0000ff;stroke:none;stroke-width:0.13111606"
+       style="fill:#0000ff;stroke:none;stroke-width:0.131116"
        id="circle844"
        cx="50.112251"
        cy="100.49878"
@@ -546,9 +546,9 @@
        cy="84.191628"
        cx="50.112251"
        id="circle860"
-       style="fill:#00ff00;stroke:none;stroke-width:0.13111606" />
+       style="fill:#00ff00;stroke:none;stroke-width:0.131116" />
     <circle
-       style="fill:#00ff00;stroke:none;stroke-width:0.13111606"
+       style="fill:#00ff00;stroke:none;stroke-width:0.131116"
        id="circle852"
        cx="50.112251"
        cy="70.530304"
@@ -573,18 +573,18 @@
        cy="123.7613"
        cx="21.007835"
        id="circle58"
-       style="fill:#ff00ff;stroke:none;stroke-width:0.03414415"
+       style="fill:#ff00ff;stroke:none;stroke-width:0.0341441"
        inkscape:label="SLOT_PULSE_LIGHT2" />
     <circle
        r="4.1779995"
        cy="100.49878"
        cx="21.007835"
        id="circle840"
-       style="fill:#0000ff;stroke:none;stroke-width:0.13111606"
+       style="fill:#0000ff;stroke:none;stroke-width:0.131116"
        inkscape:label="OUT2" />
     <circle
        inkscape:label="TRIGGER2"
-       style="fill:#00ff00;stroke:none;stroke-width:0.13111606"
+       style="fill:#00ff00;stroke:none;stroke-width:0.131116"
        id="circle856"
        cx="21.007835"
        cy="84.191628"
@@ -594,7 +594,7 @@
        cy="70.530304"
        cx="21.007835"
        id="circle848"
-       style="fill:#00ff00;stroke:none;stroke-width:0.13111606"
+       style="fill:#00ff00;stroke:none;stroke-width:0.131116"
        inkscape:label="INPUT2" />
     <circle
        inkscape:label="SLOT_ACTIVE_LIGHT2"
@@ -609,17 +609,17 @@
        cy="25.950825"
        cx="14.024384"
        id="path857"
-       style="fill:#ff0000;stroke:none;stroke-width:0.19927886" />
+       style="fill:#ff0000;stroke:none;stroke-width:0.199279" />
     <circle
        inkscape:label="ROW_SELECT_CV"
-       style="fill:#00ff00;stroke:none;stroke-width:0.13111012"
+       style="fill:#00ff00;stroke:none;stroke-width:0.13111"
        id="circle53"
        cx="14.024384"
        cy="38.306938"
        r="4.1778102" />
     <circle
        r="2.5"
-       style="fill:#ff0000;stroke:none;stroke-width:0.07845624"
+       style="fill:#ff0000;stroke:none;stroke-width:0.0784562"
        id="circle55"
        cx="6.455667"
        cy="38.306938"
@@ -629,10 +629,10 @@
        cy="123.7613"
        cx="6.455667"
        id="circle60"
-       style="fill:#ff00ff;stroke:none;stroke-width:0.03414415"
+       style="fill:#ff00ff;stroke:none;stroke-width:0.0341441"
        inkscape:label="SLOT_PULSE_LIGHT1" />
     <circle
-       style="display:inline;fill:#0000ff;stroke:none;stroke-width:0.13111606"
+       style="display:inline;fill:#0000ff;stroke:none;stroke-width:0.131116"
        id="circle1826"
        cx="64.664337"
        cy="117.33514"
@@ -644,17 +644,17 @@
        cy="117.33514"
        cx="50.112251"
        id="circle54"
-       style="fill:#0000ff;stroke:none;stroke-width:0.13111606" />
+       style="fill:#0000ff;stroke:none;stroke-width:0.131116" />
     <circle
        inkscape:label="PULSE_OUT2"
-       style="fill:#0000ff;stroke:none;stroke-width:0.13111606"
+       style="fill:#0000ff;stroke:none;stroke-width:0.131116"
        id="circle49"
        cx="21.007835"
        cy="117.33514"
        r="4.1779995" />
     <circle
        inkscape:label="PULSE_OUT1"
-       style="fill:#0000ff;stroke:none;stroke-width:0.13111606"
+       style="fill:#0000ff;stroke:none;stroke-width:0.131116"
        id="circle47"
        cx="6.455667"
        cy="117.33514"
@@ -664,11 +664,11 @@
        cy="100.49878"
        cx="6.455667"
        id="circle838"
-       style="fill:#0000ff;stroke:none;stroke-width:0.13111606"
+       style="fill:#0000ff;stroke:none;stroke-width:0.131116"
        inkscape:label="OUT1" />
     <circle
        inkscape:label="TRIGGER1"
-       style="fill:#00ff00;stroke:none;stroke-width:0.13111606"
+       style="fill:#00ff00;stroke:none;stroke-width:0.131116"
        id="circle854"
        cx="6.455667"
        cy="84.191628"
@@ -678,7 +678,7 @@
        cy="70.530304"
        cx="6.455667"
        id="circle846"
-       style="fill:#00ff00;stroke:none;stroke-width:0.13111606"
+       style="fill:#00ff00;stroke:none;stroke-width:0.131116"
        inkscape:label="INPUT1" />
     <circle
        inkscape:label="SLOT_ACTIVE_LIGHT1"
@@ -692,11 +692,11 @@
        cy="100.49878"
        cx="35.560154"
        id="circle842"
-       style="fill:#0000ff;stroke:none;stroke-width:0.13111606"
+       style="fill:#0000ff;stroke:none;stroke-width:0.131116"
        inkscape:label="POLYPHONIC_OUT" />
     <circle
        inkscape:label="TRIGGER_ALL"
-       style="display:inline;fill:#00ff00;stroke:none;stroke-width:0.13111606"
+       style="display:inline;fill:#00ff00;stroke:none;stroke-width:0.131116"
        id="circle858"
        cx="35.560154"
        cy="84.191628"

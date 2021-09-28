@@ -1,5 +1,9 @@
 # Changelog for Chortling Hamster Modules
 
+## v1.1.2.2
+
+* Rolls back code in Bitwise so that it once again uses the standard VCV lights code for the LEDs in the pattern display grid. This is in preparation for v2.
+
 ## v1.1.2.1
 
 * Updates source code license to [GNU General Public License v3.0](LICENSE-GPLv3.txt) and graphics license, excluding fonts, to [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/).

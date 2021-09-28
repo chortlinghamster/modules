@@ -19,6 +19,13 @@ static int setSelection(float val, float cv, float attn, float max)
 
 // Button up your overcoat, because here we go!
 struct Bitwise : Module {
+
+	// Setting these just in case. For laterz, y'know? I think it's fairly clear what they represent.
+	static const int numberOfPatterns = 8;
+	static const int numberOfRows = 16;
+	static const int numberOfColumns = 4;
+	static const int numberOfPatternSlots = numberOfRows * numberOfColumns;
+
 	enum ParamIds {
 		ROW_SELECT_PARAM,
 		ROW_SELECT_CV_ATN_PARAM,
@@ -28,30 +35,25 @@ struct Bitwise : Module {
 		NUM_PARAMS
 	};
 	enum InputIds {
-		ENUMS(IN_VOLTAGE, 4),
-		ENUMS(IN_TRIGGER, 4),
+		ENUMS(IN_VOLTAGE, numberOfColumns),
+		ENUMS(IN_TRIGGER, numberOfColumns),
 		TRIGGER_ALL_INPUT,
 		ROW_SELECT_CV_INPUT,
 		PATTERN_SELECT_CV_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
-		ENUMS(OUT_VOLTAGE, 4),
-		ENUMS(OUT_PULSE, 4),
+		ENUMS(OUT_VOLTAGE, numberOfColumns),
+		ENUMS(OUT_PULSE, numberOfColumns),
 		POLYPHONIC_OUT_OUTPUT,
 		NUM_OUTPUTS
 	};
 	enum LightIds {
-		ENUMS(ACTIVE_LIGHT, 4),
-		ENUMS(PULSE_LIGHT, 4),
-		NUM_LIGHTS
+		ENUMS(ACTIVE_LIGHT, numberOfColumns),
+		ENUMS(PULSE_LIGHT, numberOfColumns),
+ 		ENUMS(PATTERN_INDICATOR_LIGHT, numberOfPatternSlots),
+ 		NUM_LIGHTS
 	};
-
-	// Setting these just in case. For laterz, y'know? I think it's fairly clear what they represent.
-	static const int numberOfPatterns = 8;
-	static const int numberOfRows = 16;
-	static const int numberOfColumns = 4;
-	static const int numberOfPatternSlots = numberOfRows * numberOfColumns;
 
 	// Preset patterns. Patterns, patterns and more patterns. Well. Eight of them. I mean, you've got to stop somewhere, right?
 	int patterns[numberOfPatterns][numberOfPatternSlots] = {
@@ -325,6 +327,35 @@ struct Bitwise : Module {
 		// Get the value of global voltage out attenuator.
 		globalAttenuatorVoltage = params[GLOBAL_VOLTAGE_ATTENUATOR_PARAM].getValue();
 
+        // Set the pattern indicator lights' brightnesses. This was really hard to figure out and I hope you feel guilty.
+        if (dirtyPatternGrid) {
+        	dirtyPatternGrid = false;
+	        for (int i = 0; i < numberOfPatternSlots; i++) {
+
+	            lights[PATTERN_INDICATOR_LIGHT + i].setBrightness(
+
+	                // Is this light set to active in the current patttern?
+	                (patterns[pattern - 1][i] == 1)
+
+	                // Yes it is! Great! Now, riddle me this. Is this light also in the currently selected row?
+	                ? (i / numberOfColumns == row - 1)
+
+	                    // Yes it is! Set this light's brightness to full, as it is in the currently selected row and also it is set to active in the currently selected pattern. Yay!
+	                    ? 2.f
+
+	                    // Not it isn't. Never mind. Set this light's brightness to be dimmer, as it is not in the currently selected row, but it is set to active in the currently selected pattern, so I'd better indicatorise that. w00t!
+	                    // : 0.3f
+	                    : 0.1f
+
+	                // This light isn't in the currently selected row, neither is it set to active in the currently selected pattern, so turn it off. What a party pooper!
+	                : 0.f
+
+	            ); // End of setBrightness().
+
+	        } // End of pattern indicator lights for loop.        	
+        }
+
+
 		// Loop through the four sample and hold columns (circuits, things, whatevs) and do stuff to them. Nasty, evil stuff. Muahahahaaa! The knuckles! The horrible knuckles!
 		for (int i = 0; i < numberOfColumns; i++) {
 
@@ -332,7 +363,7 @@ struct Bitwise : Module {
 			isTheCurrentColumnSelected = patterns[pattern - 1][((row - 1) * numberOfColumns) + i];
 
 			// Set the current column's active light brightness to full brightness if, er, active. Darkness if not. Such terrible, terrible darkness…
-			lights[i].setBrightness((isTheCurrentColumnSelected) ? 1.f : 0.f);
+			lights[ACTIVE_LIGHT + i].setBrightness((isTheCurrentColumnSelected) ? 1.f : 0.f);
 
 			// Here's the crazy logic which decides if a sample and hold column is triggered. If you can make it better I will buy you a bag of Jelly Tots. Note that individual trigger inputs take priority over the trigger all input.
 			if (isTheCurrentColumnSelected) {
@@ -393,87 +424,6 @@ struct Bitwise : Module {
 
 // Oh, yeah. The widget. Here it comes! Look busy!
 struct BitwiseWidget : ModuleWidget {
-
-	// Contains the pattern LEDs and should only repaint itself when it's dirty. Ewww!
-	struct CHMPatternGridFramebufferWidget : FramebufferWidget{
-		Bitwise *module;
-
-		CHMPatternGridFramebufferWidget(Bitwise *m){
-			module = m;
-		}
-
-		void step() override{
-			// Only draw if dirty.
-			if(module->dirtyPatternGrid) {
-				FramebufferWidget::dirty = true;
-				module->dirtyPatternGrid = false;
-			}
-			FramebufferWidget::step();
-		}
-	};
-
-	// Pattern LEDs.
-	struct CHMPatternGridTransparentWidget : TransparentWidget{
-		Bitwise *module;
-
-		CHMPatternGridTransparentWidget(Bitwise *m){
-			module = m;
-			box.pos = mm2px(Vec(28.935, 7.77));
-			box.size = mm2px(Vec(13.25, 53.45));
-		}
-
-		void draw(const DrawArgs &args) override {
-			float ledRadius = mm2px(1.1);
-			float ledSpacing = mm2px(3.35);
-			float ledOffset = mm2px(0.5);
-
-			// Draw LEDs not in current pattern. (Off.)
-			nvgBeginPath(args.vg);
-			nvgFillColor(args.vg, nvgRGBA(80,80,80,255));
-			for (int y = 0; y < module->numberOfRows; y++) {
-				for (int x = 0; x < module->numberOfColumns; x++) {
-					if (module->patterns[module->pattern-1][(y * module->numberOfColumns) + x] == 0)
-						nvgCircle(args.vg, ledOffset + ledRadius + (ledSpacing * x), ledOffset + ledRadius + (ledSpacing * y), ledRadius);
-				}
-			}
-			nvgFill(args.vg);
-
-			// Draw LEDs in current pattern. (Half on.)
-			nvgBeginPath(args.vg);
-			nvgFillColor(args.vg, nvgRGBA(160,160,0,255));
-			for (int y = 0; y < module->numberOfRows; y++) {
-				for (int x = 0; x < module->numberOfColumns; x++) {
-					if (module->patterns[module->pattern-1][(y * module->numberOfColumns) + x] == 1 && y != module->row-1)
-						nvgCircle(args.vg, ledOffset + ledRadius + (ledSpacing * x), ledOffset + ledRadius + (ledSpacing * y), ledRadius);
-				}
-			}
-			nvgFill(args.vg);
-
-			// Draw LEDs in current pattern and row. (Full on.)
-			nvgBeginPath(args.vg);
-			nvgFillColor(args.vg, nvgRGBA(255,255,215,255));
-			for (int y = 0; y < module->numberOfRows; y++) {
-				for (int x = 0; x < module->numberOfColumns; x++) {
-					if (module->patterns[module->pattern-1][(y * module->numberOfColumns) + x] == 1 && y == module->row-1)
-						nvgCircle(args.vg, ledOffset + ledRadius + (ledSpacing * x), ledOffset + ledRadius + (ledSpacing * y), ledRadius);
-				}
-			}
-			nvgFill(args.vg);
-
-			// Draw LEDs in current pattern and row, glow. (Full on.)
-			nvgBeginPath(args.vg);
-			nvgFillColor(args.vg, nvgRGBA(255,255,255,60));
-			for (int y = 0; y < module->numberOfRows; y++) {
-				for (int x = 0; x < module->numberOfColumns; x++) {
-					if (module->patterns[module->pattern-1][(y * module->numberOfColumns) + x] == 1 && y == module->row-1)
-						nvgCircle(args.vg, ledOffset + ledRadius + (ledSpacing * x), ledOffset + ledRadius + (ledSpacing * y), ledRadius + ledOffset);
-				}
-			}
-			nvgFill(args.vg);
-
-		}
-	};
-
 	// Contains the segment displays and should only repaint itself when it's dirty. Ewww!
 	// Tip o' th' hat to https://community.vcvrack.com/t/framebufferwidget-question/3041.
 	struct CHMSegmentDisplayFramebufferWidget : FramebufferWidget{
@@ -542,16 +492,6 @@ struct BitwiseWidget : ModuleWidget {
 
 		// Using if (module) stops Rack crashing when it tries to render a preview of the front panel in the module browser, as the segment displays don't have any values to render in the module browser.
 		if (module) {
-			// Pattern LEDs.
-			// Create the framebuffer widget which will contain the pattern LEDs widget.
-			CHMPatternGridFramebufferWidget *chmPatternGridDisplay = new CHMPatternGridFramebufferWidget(module);
-			// Create the pattern LEDs widget.
-			CHMPatternGridTransparentWidget *chmPatternGrid = new CHMPatternGridTransparentWidget(module);
-			// Add the pattern LEDs widget to the framebuffer widget.
-			chmPatternGridDisplay->addChild(chmPatternGrid);
-			// Add the framebuffer widget to the main module widget.
-			addChild(chmPatternGridDisplay);
-
 			// Segment displays.
 			// Create the framebuffer widget which will contain the segment display widgets for the row and pattern selection values.
 			CHMSegmentDisplayFramebufferWidget *chmSegmentDisplays = new CHMSegmentDisplayFramebufferWidget(module);
@@ -606,6 +546,10 @@ struct BitwiseWidget : ModuleWidget {
 		// (Shake it all about puts!)
 
 		// Blinkenlights!
+		for (int i = 0; i < Bitwise::numberOfPatternSlots; i++) {
+			addChild(createLightCentered<SmallLight<YellowLight>>(mm2px(Vec(30.531 + ((i % 4) * 3.270), 9.946 + (int(i / 4) * 3.270))), module, Bitwise::PATTERN_INDICATOR_LIGHT + i));
+		}
+
 		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(6.456, 58.665)), module, Bitwise::ACTIVE_LIGHT + 0));
 		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(21.008, 58.665)), module, Bitwise::ACTIVE_LIGHT + 1));
 		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(50.112, 58.665)), module, Bitwise::ACTIVE_LIGHT + 2));
