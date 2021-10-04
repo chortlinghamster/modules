@@ -259,6 +259,48 @@ struct Bitwise : Module {
 
 		// Configure the global out attenuator parameter knob.
 		configParam(GLOBAL_VOLTAGE_ATTENUATOR_PARAM, 0.f, 1.f, 1.f, "Global voltage output attenuator");
+
+		// Configure input labels.
+		configInput(IN_VOLTAGE + 0, "Block A voltage");
+		configInput(IN_VOLTAGE + 1, "Block B voltage");
+		configInput(IN_VOLTAGE + 2, "Block C voltage");
+		configInput(IN_VOLTAGE + 3, "Block D voltage");
+		configInput(IN_TRIGGER + 0, "Block A trigger");
+		configInput(IN_TRIGGER + 1, "Block B trigger");
+		configInput(IN_TRIGGER + 2, "Block C trigger");
+		configInput(IN_TRIGGER + 3, "Block D trigger");
+		configInput(TRIGGER_ALL_INPUT, "Trigger all");
+		configInput(ROW_SELECT_CV_INPUT, "Row select CV");
+		configInput(PATTERN_SELECT_CV_INPUT, "Pattern select CV");
+
+		// Configure output labels.
+		configOutput(OUT_VOLTAGE + 0, "Block A voltage");
+		configOutput(OUT_VOLTAGE + 1, "Block B voltage");
+		configOutput(OUT_VOLTAGE + 2, "Block C voltage");
+		configOutput(OUT_VOLTAGE + 3, "Block D voltage");
+		configOutput(OUT_PULSE + 0, "Block A pulse");
+		configOutput(OUT_PULSE + 1, "Block B pulse");
+		configOutput(OUT_PULSE + 2, "Block C pulse");
+		configOutput(OUT_PULSE + 3, "Block D pulse");
+		configOutput(POLYPHONIC_OUT_OUTPUT, "Polyphonic (x4) voltage");
+
+		// Configure light labels.
+		// There are no labels for the 64 pattern indicator lights.
+		configLight(ACTIVE_LIGHT + 0, "Block A active");
+		configLight(ACTIVE_LIGHT + 1, "Block B active");
+		configLight(ACTIVE_LIGHT + 2, "Block C active");
+		configLight(ACTIVE_LIGHT + 3, "Block D active");
+		configLight(PULSE_LIGHT + 0, "Block A pulse output");
+		configLight(PULSE_LIGHT + 1, "Block B pulse output");
+		configLight(PULSE_LIGHT + 2, "Block C pulse output");
+		configLight(PULSE_LIGHT + 3, "Block D pulse output");
+
+		// Configure bypass routes.
+		// Only for voltage inputs to voltage outputs at the moment.
+		// Note that the trigger inputs, pulse outputs and polyphonic output are ignored when bypassing Bitwise.
+		for (int i = 0; i < Bitwise::numberOfColumns; i++) {
+			configBypass(IN_VOLTAGE + i, OUT_VOLTAGE + i);
+		}
 	}
 
 
@@ -341,7 +383,7 @@ struct Bitwise : Module {
 	                ? (i / numberOfColumns == row - 1)
 
 	                    // Yes it is! Set this light's brightness to full, as it is in the currently selected row and also it is set to active in the currently selected pattern. Yay!
-	                    ? 2.f
+	                    ? 1.f
 
 	                    // Not it isn't. Never mind. Set this light's brightness to be dimmer, as it is not in the currently selected row, but it is set to active in the currently selected pattern, so I'd better indicatorise that. w00t!
 	                    // : 0.3f
@@ -439,6 +481,10 @@ struct BitwiseWidget : ModuleWidget {
 			}
 			FramebufferWidget::step();
 		}
+		void draw(const DrawArgs &args) override {
+			nvgGlobalTint(args.vg, color::WHITE);
+			FramebufferWidget::draw(args);
+		}
 	};
 
 	// Generic segment display.
@@ -446,6 +492,8 @@ struct BitwiseWidget : ModuleWidget {
 	struct CHMSegmentDisplayWidget : TransparentWidget{
 		Bitwise *module;
 		std::shared_ptr<Font> font;
+		std::string fontPath;
+		std::string valueAsString;
 		int *valueToDisplay;
 		Vec textOffset;
 		bool isHex;
@@ -458,31 +506,33 @@ struct BitwiseWidget : ModuleWidget {
 
 			box.pos = mm2px(Vec(pos.x, pos.y));
 			box.size = mm2px(Vec(size.x, size.y));
-			font = APP->window->loadFont(asset::plugin(pluginInstance, "res/fonts/dseg7-modern/DSEG7Modern-BoldItalic.ttf"));
+
+			fontPath = std::string(asset::plugin(pluginInstance, "res/fonts/dseg7-modern/DSEG7Modern-BoldItalic.ttf"));
 		}
 
 		void draw(const DrawArgs &args) override {
-			// Draw the "inactive" display segments. Ahem!
-			nvgBeginPath(args.vg);
-			nvgFontFaceId(args.vg, font->handle);
-			nvgFontSize(args.vg, 16);
-			nvgTextAlign(args.vg, NVG_ALIGN_TOP | NVG_ALIGN_RIGHT);
-			nvgFillColor(args.vg, nvgRGB(70, 70, 70));
-			// A little jig here to convert the int value to a string. See also the use of c_str() in the next line.
-			std::string valueAsString = std::to_string((isHex ? 88 : 8));
-			nvgText(args.vg, mm2px(textOffset.x), mm2px(textOffset.y), valueAsString.c_str(), NULL);
-			nvgFill(args.vg);
+			// Thank you to Marc Boulé of Impromptu Modular for the indirect help with the segment displays in Bitwise for VCV Rack v2.
+			if (!(font = APP->window->loadFont(fontPath))) {
+				return;
+			}
 
-			// Draw the actual value.
+
 			nvgBeginPath(args.vg);
-			nvgFontFaceId(args.vg, font->handle);
-			nvgFontSize(args.vg, 16);
 			nvgTextAlign(args.vg, NVG_ALIGN_TOP | NVG_ALIGN_RIGHT);
-			nvgFillColor(args.vg, nvgRGB(200, 200, 10));
-			// A little jig here to convert the int value to a string. See also the use of c_str() in the next line.
-			valueAsString = std::to_string(*valueToDisplay);
+			nvgFontSize(args.vg, 16);
+			nvgGlobalTint(args.vg, color::WHITE);
+
+			nvgFontFaceId(args.vg, font->handle);
+
+			// Draw the "inactive" display segments.
+			valueAsString = std::to_string((isHex ? 88 : 8));
+			nvgFillColor(args.vg, nvgRGB(50, 50, 50));
 			nvgText(args.vg, mm2px(textOffset.x), mm2px(textOffset.y), valueAsString.c_str(), NULL);
-			nvgFill(args.vg);
+
+			// Draw the "active" display segments.
+			valueAsString = std::to_string(*valueToDisplay);
+			nvgFillColor(args.vg, nvgRGB(200, 200, 10));
+			nvgText(args.vg, mm2px(textOffset.x), mm2px(textOffset.y), valueAsString.c_str(), NULL);
 		}
 	};
 

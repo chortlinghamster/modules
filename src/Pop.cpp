@@ -1,6 +1,5 @@
 #include "ChortlingHamsterModules.hpp"
 
-
 struct Pop : Module {
 	enum ParamIds {
 		NUM_PARAMS
@@ -24,12 +23,24 @@ struct Pop : Module {
 
 	Pop() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+
+		// Configure input labels.
+		configInput(VOLTAGE_INPUT, "Voltage");
+		configInput(TRIGGER_INPUT, "Trigger");
+
+		// Configure output labels.
+		configOutput(VOLTAGE_OUTPUT, "Voltage");
+
+		// Configure bypass routes.
+		configBypass(VOLTAGE_INPUT, VOLTAGE_OUTPUT);
 	}
 
 	void process(const ProcessArgs &args) override {
 		// Hold input voltage if triggered
-		if (st.process(rescale(inputs[TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)))
+		if (st.process(rescale(inputs[TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f))) {
 			sampledVoltage = inputs[VOLTAGE_INPUT].getVoltage();
+		}
+
 		outputs[VOLTAGE_OUTPUT].setVoltage(sampledVoltage);
 	}
 };

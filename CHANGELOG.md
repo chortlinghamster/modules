@@ -1,5 +1,9 @@
 # Changelog for Chortling Hamster Modules
 
+## v2.0.0
+
+* Updates modules to work with (pre-release) VCV Rack Community Edition 2.git.042a9ce0.
+
 ## v1.1.2.2
 
 * Rolls back code in Bitwise so that it once again uses the standard VCV lights code for the LEDs in the pattern display grid. This is in preparation for v2.
