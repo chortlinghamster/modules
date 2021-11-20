@@ -9,26 +9,21 @@ extern Plugin *pluginInstance;
 extern Model *modelPop;
 extern Model *modelBitwise;
 
-
-// Declare some custom panel doohickeys.
+// Custom large knob.
 struct CHMRoundLargeKnob : RoundKnob {
 	CHMRoundLargeKnob() {
 		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CHMRoundLargeKnob.svg")));
 	}
 };
 
-// struct CHMRoundLargeOutKnob : RoundKnob {
-// 	CHMRoundLargeKnob() {
-// 		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CHMRoundLargeOutKnob.svg")));
-// 	}
-// };
-
+// Custom large snappable knob.
 struct CHMRoundLargeSnapKnob : CHMRoundLargeKnob {
 	CHMRoundLargeSnapKnob() {
 		snap = true;
 	}
 };
 
+// Custom small knob.
 struct CHMRoundSmallKnob : RoundKnob {
 	CHMRoundSmallKnob() {
 		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CHMRoundSmallKnob.svg")));

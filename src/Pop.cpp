@@ -45,7 +45,6 @@ struct Pop : Module {
 	}
 };
 
-
 struct PopWidget : ModuleWidget {
 	PopWidget(Pop *module) {
 		setModule(module);
@@ -62,6 +61,5 @@ struct PopWidget : ModuleWidget {
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(5.08, 100.499)), module, Pop::VOLTAGE_OUTPUT));
 	}
 };
-
 
 Model *modelPop = createModel<Pop, PopWidget>("Pop");

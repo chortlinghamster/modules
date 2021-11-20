@@ -305,7 +305,6 @@ struct Bitwise : Module {
 
 
 	void process(const ProcessArgs &args) override {
-
 		// Remember, row and pattern are integers, so the floats returned from setSelection() have their fractional parts removed. Ouch!
 
 		// Set the current row, using an arcane spell involving the row select parameter value, row select CV input voltage, row select CV input voltage attenuator, fresh garlic and a thermal blanket. Crikey!
@@ -332,7 +331,6 @@ struct Bitwise : Module {
 			dirtySegmentDisplay = true;
 		}
 		oldRow = row;
-
 
 		// Set the pattern select value, just like we did with the row selection. Only different!
 		pattern = (inputs[PATTERN_SELECT_CV_INPUT].isConnected())
@@ -396,7 +394,6 @@ struct Bitwise : Module {
 
 	        } // End of pattern indicator lights for loop.        	
         }
-
 
 		// Loop through the four sample and hold columns (circuits, things, whatevs) and do stuff to them. Nasty, evil stuff. Muahahahaaa! The knuckles! The horrible knuckles!
 		for (int i = 0; i < numberOfColumns; i++) {
@@ -610,7 +607,6 @@ struct BitwiseWidget : ModuleWidget {
 		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(64.664, 123.761)), module, Bitwise::PULSE_LIGHT + 3));
 	}
 };
-
 
 Model *modelBitwise = createModel<Bitwise, BitwiseWidget>("Bitwise");
 

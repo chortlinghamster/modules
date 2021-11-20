@@ -2,7 +2,7 @@
 
 ## v2.0.0
 
-* Updates modules to work with (pre-release) VCV Rack Community Edition 2.git.042a9ce0.
+* Updates modules to work with VCV Rack 2.
 
 ## v1.1.2.2
 

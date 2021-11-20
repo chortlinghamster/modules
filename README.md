@@ -1,6 +1,6 @@
 # Chortling Hamster's Modules for VCV Rack
 
-Here are some modules for [VCV Rack](https://www.vcvrack.com).
+Here are some modules for [VCV Rack 2](https://www.vcvrack.com).
 
 1. Pop. A small sample and hold module. One input, one trigger and one output. But it has a chortling hamster on it!
 2. Bitwise. Four sample and hold circuits whose triggers can be affected by CV controlled patterns.
