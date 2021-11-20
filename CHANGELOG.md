@@ -3,6 +3,7 @@
 ## v2.0.0
 
 * Updates modules to work with VCV Rack 2.
+* Updates documentation and example patches.
 
 ## v1.1.2.2
 

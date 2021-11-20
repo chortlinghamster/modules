@@ -1,4 +1,4 @@
-# Chortling Hamster's Modules for VCV Rack
+# Chortling Hamster Modules for VCV Rack
 
 Here are some modules for [VCV Rack 2](https://www.vcvrack.com).
 
@@ -14,11 +14,11 @@ Pop is a _very_ simple trigger-based [sample and hold](https://en.wikipedia.org/
 ### How does Pop work? What do I do? I is confused!
 
 * Add Pop to your totally brilliant VCV Rack patch.
-* Connect a control voltage, such as the _SIN_ output from a [Fundamental](https://vcvrack.com/Fundamental.html) LFO-1 module, to the _in_ port.
-* Connect a trigger, such as the _SQR_ output from another Fundamental LFO-1 module, to the _trig_ port.
-* Connect Pop's _out_ port to a control voltage input on another module, such as the Fundamental VCO-1 module.
+* Connect a control voltage, such as a noise output from a VCV Noise module, to the _V.IN_ port.
+* Connect a trigger, such as the _SQR_ output from a VCV LFO module, to the _TRIG_ port.
+* Connect Pop's _V.OUT_ port to a control voltage input on another module, such the _FM_ input on a VCV VCO module.
 
-Every time Pop's _trig_ port is, er, triggered, the control voltage value from the _in_ port will be sampled and held until the next trigger comes along, and the current held voltage value will be sent through the _out_ port for you to do amazing things with. Huzzah!
+Every time Pop's _TRIG_ port is triggered, the control voltage value coming into the _V.IN_ port will be sampled and held until the next trigger comes along, and the current held voltage value will be sent through the _V.OUT_ port for you to do amazing things with. Huzzah!
 
 Here's a screen shot of a VCV Rack patch using Pop _to do just that_! Cripes!
 
