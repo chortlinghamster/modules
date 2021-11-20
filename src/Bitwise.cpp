@@ -482,7 +482,6 @@ struct BitwiseWidget : ModuleWidget {
 			FramebufferWidget::step();
 		}
 		void draw(const DrawArgs &args) override {
-			nvgGlobalTint(args.vg, color::WHITE);
 			FramebufferWidget::draw(args);
 		}
 	};
@@ -510,29 +509,30 @@ struct BitwiseWidget : ModuleWidget {
 			fontPath = std::string(asset::plugin(pluginInstance, "res/fonts/dseg7-modern/DSEG7Modern-BoldItalic.ttf"));
 		}
 
-		void draw(const DrawArgs &args) override {
-			// Thank you to Marc Boulé of Impromptu Modular for the indirect help with the segment displays in Bitwise for VCV Rack v2.
-			if (!(font = APP->window->loadFont(fontPath))) {
-				return;
+		void drawLayer(const DrawArgs& args, int layer) override {
+		// void draw(const DrawArgs &args) override {
+			if (layer == 1) {
+				// Thank you to Marc Boulé of Impromptu Modular for the indirect help with the segment displays in Bitwise for VCV Rack v2.
+				if (!(font = APP->window->loadFont(fontPath))) {
+					return;
+				}
+
+				nvgBeginPath(args.vg);
+				nvgTextAlign(args.vg, NVG_ALIGN_TOP | NVG_ALIGN_RIGHT);
+				nvgFontSize(args.vg, 16);
+				nvgFontFaceId(args.vg, font->handle);
+
+				// Draw the "inactive" display segments.
+				valueAsString = std::to_string((isHex ? 88 : 8));
+				nvgFillColor(args.vg, nvgRGB(50, 50, 50));
+				nvgText(args.vg, mm2px(textOffset.x), mm2px(textOffset.y), valueAsString.c_str(), NULL);
+
+				// Draw the "active" display segments.
+				valueAsString = std::to_string(*valueToDisplay);
+				nvgFillColor(args.vg, nvgRGB(200, 200, 10));
+				nvgText(args.vg, mm2px(textOffset.x), mm2px(textOffset.y), valueAsString.c_str(), NULL);
 			}
-
-
-			nvgBeginPath(args.vg);
-			nvgTextAlign(args.vg, NVG_ALIGN_TOP | NVG_ALIGN_RIGHT);
-			nvgFontSize(args.vg, 16);
-			nvgGlobalTint(args.vg, color::WHITE);
-
-			nvgFontFaceId(args.vg, font->handle);
-
-			// Draw the "inactive" display segments.
-			valueAsString = std::to_string((isHex ? 88 : 8));
-			nvgFillColor(args.vg, nvgRGB(50, 50, 50));
-			nvgText(args.vg, mm2px(textOffset.x), mm2px(textOffset.y), valueAsString.c_str(), NULL);
-
-			// Draw the "active" display segments.
-			valueAsString = std::to_string(*valueToDisplay);
-			nvgFillColor(args.vg, nvgRGB(200, 200, 10));
-			nvgText(args.vg, mm2px(textOffset.x), mm2px(textOffset.y), valueAsString.c_str(), NULL);
+			Widget::drawLayer(args, layer);
 		}
 	};
 
