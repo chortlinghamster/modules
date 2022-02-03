@@ -8,4 +8,5 @@ void init(Plugin *p) {
 	// Add modules here
 	p->addModel(modelPop);
 	p->addModel(modelBitwise);
+	p->addModel(modelTie);
 }

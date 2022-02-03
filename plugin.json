@@ -1,7 +1,7 @@
 {
   "slug": "ChortlingHamsterModules",
   "name": "Chortling Hamster Modules",
-  "version": "2.0.0",
+  "version": "2.1.0alpha",
   "license": "GPL-3.0-only",
   "brand": "Chortling Hamster Modules",
   "author": "Alan Holding",
@@ -27,6 +27,14 @@
       "tags": [
         "Polyphonic",
         "Sample and hold"
+      ]
+    },
+    {
+      "slug": "Tie",
+      "name": "Tie",
+      "description": "Volatile looping signal buffer",
+      "tags": [
+        "Recording"
       ]
     }
   ]

@@ -8,6 +8,7 @@ extern Plugin *pluginInstance;
 // Declare each Model, defined in each module source file
 extern Model *modelPop;
 extern Model *modelBitwise;
+extern Model *modelTie;
 
 // Custom large knob.
 struct CHMRoundLargeKnob : RoundKnob {
