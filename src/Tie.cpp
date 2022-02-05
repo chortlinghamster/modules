@@ -2,13 +2,14 @@
 
 struct Tie : Module {
 	enum ParamId {
+		CROSSFADE_PARAM,
 		PARAMS_LEN
 	};
 	enum InputId {
 		VOLTAGE_INPUT,
 		RECORD_GATE_INPUT,
 		RESTART_PLAYBACK_INPUT,
-		CLEAR_INPUT,
+		CLEAR_RECORDING_INPUT,
 		INPUTS_LEN
 	};
 	enum OutputId {
@@ -16,7 +17,7 @@ struct Tie : Module {
 		OUTPUTS_LEN
 	};
 	enum LightId {
-		RECORD_LIGHT,
+		RECORD_GATE_LIGHT,
 		LIGHTS_LEN
 	};
 
@@ -33,7 +34,7 @@ struct Tie : Module {
 
 	// crossfade / slew limiter stuff
 	// note: smaller rise and fall speeds means a longer slew
-	// approximately eight milliseconds slew
+	// approximately eight milliseconds total slew at 48 KHz
 	float crossfadeSlewLimiterRiseAndFallSpeed = 150.f;
 	float crossfadeAmount = 0.f;
 
@@ -47,11 +48,15 @@ struct Tie : Module {
 	Tie() {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
 
+		// configure the crossfade length param
+		// todo!
+		configParam(CROSSFADE_PARAM, 0.f, 1.f, 1.f, "Crossfade anti-click length");
+
 		// configure the tooltip labels on the front panel
 		configInput(VOLTAGE_INPUT, "Voltage");
 		configInput(RECORD_GATE_INPUT, "Recording gate");
 		configInput(RESTART_PLAYBACK_INPUT, "Restart playback trigger");
-		configInput(CLEAR_INPUT, "Clear recording trigger");
+		configInput(CLEAR_RECORDING_INPUT, "Clear recording trigger");
 		configOutput(VOLTAGE_OUTPUT, "Voltage");
 
 		// configure the bypass route (only one)
@@ -66,7 +71,7 @@ struct Tie : Module {
 
 	void process(const ProcessArgs& args) override {
 		// clear the recording buffer when a trigger arrives
-		if (clearRecordingTrigger.process(inputs[CLEAR_INPUT].getVoltage())) {
+		if (clearRecordingTrigger.process(inputs[CLEAR_RECORDING_INPUT].getVoltage())) {
 			// immediately fill the recording buffer with zeros
 			std::fill(std::begin(buffer), std::end(buffer), 0);
 		}
@@ -86,7 +91,7 @@ struct Tie : Module {
 		crossfadeAmount = crossfadeSlewLimiter.process(args.sampleTime, recordingGateState);
 
 		// set the recording light's brightness
-		lights[RECORD_LIGHT].setBrightness(recordingGateState);
+		lights[RECORD_GATE_LIGHT].setBrightness(recordingGateState);
 
 		// set the value of the current sample
 		// note: output is redundant, but keeping in case needed later
@@ -119,17 +124,27 @@ struct TieWidget : ModuleWidget {
 		addChild(createWidget<ScrewBlack>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<ScrewBlack>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
+		// params
+		addParam(createParamCentered<CHMRoundLargeKnob>(mm2px(Vec(12.7, 82.701)), module, Tie::CROSSFADE_PARAM));
+
+		// lights
+		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(19.315, 31.188)), module, Tie::RECORD_GATE_LIGHT));
+
 		// inputs
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(5.08, 22.905)), module, Tie::VOLTAGE_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(5.08, 37.538)), module, Tie::RECORD_GATE_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(5.08, 70.53)), module, Tie::RESTART_PLAYBACK_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(5.08, 84.192)), module, Tie::CLEAR_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, 16.555)), module, Tie::VOLTAGE_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, 31.188)), module, Tie::RECORD_GATE_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.085, 68.413)), module, Tie::RESTART_PLAYBACK_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(19.315, 68.413)), module, Tie::CLEAR_RECORDING_INPUT));
 
 		// outputs
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(5.08, 100.499)), module, Tie::VOLTAGE_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, 100.499)), module, Tie::VOLTAGE_OUTPUT));
 
 		// shake it all about puts
-		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(5.08, 47.063)), module, Tie::RECORD_LIGHT));
+		// gate or latch switch
+		addChild(createWidgetCentered<Widget>(mm2px(Vec(12.7, 41.772))));
+		// loop or once switch
+		addChild(createWidgetCentered<Widget>(mm2px(Vec(12.7, 52.355))));
+
 	}
 };
 
