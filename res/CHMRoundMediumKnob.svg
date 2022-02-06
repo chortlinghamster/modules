@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="8.3559999mm"
+   height="8.3559999mm"
+   viewBox="0 0 8.3560001 8.3560001"
+   version="1.1"
+   id="svg980"
+   inkscape:version="1.1.1 (c3084ef, 2021-09-22)"
+   sodipodi:docname="CHMRoundMediumKnob.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs974" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="12.904699"
+     inkscape:cx="18.559131"
+     inkscape:cy="24.022257"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="678"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="1"
+     width="8.356mm" />
+  <metadata
+     id="metadata977">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="knob"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-284.3)">
+    <path
+       style="fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:1.08915;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 4.178,284.3 A 4.178,4.178 0 0 0 0,288.478 4.178,4.178 0 0 0 4.178,292.656 4.178,4.178 0 0 0 8.356,288.478 4.178,4.178 0 0 0 4.178,284.3 Z m 0,0.97038 A 3.2075197,3.2075197 0 0 1 7.3856214,288.478 3.2075197,3.2075197 0 0 1 4.178,291.68562 3.2075197,3.2075197 0 0 1 0.97037859,288.478 3.2075197,3.2075197 0 0 1 4.178,285.27038 Z"
+       id="path1525"
+       inkscape:connector-curvature="0"
+       inkscape:label="outer" />
+    <circle
+       r="3.2075198"
+       inkscape:label="inner"
+       cy="288.478"
+       cx="4.178"
+       id="circle832"
+       style="fill:#ffccaa;fill-opacity:1;stroke:none;stroke-width:0.836159;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       style="fill:#ff7f2a;fill-opacity:1;stroke:none;stroke-width:0.0880117;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 3.7174332,284.78049 h 0.9211339 v 3.6975 H 3.7174332 Z"
+       id="rect835"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="indicator" />
+  </g>
+</svg>

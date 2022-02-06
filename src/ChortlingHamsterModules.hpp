@@ -24,6 +24,13 @@ struct CHMRoundLargeSnapKnob : CHMRoundLargeKnob {
 	}
 };
 
+// Custom medium knob.
+struct CHMRoundMediumKnob : RoundKnob {
+	CHMRoundMediumKnob() {
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CHMRoundMediumKnob.svg")));
+	}
+};
+
 // Custom small knob.
 struct CHMRoundSmallKnob : RoundKnob {
 	CHMRoundSmallKnob() {

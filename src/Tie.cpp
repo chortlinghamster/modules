@@ -2,22 +2,28 @@
 
 struct Tie : Module {
 	enum ParamId {
+		MONITOR_PUSH_BUTTON_PARAM,
+		GATE_OR_LATCH_PARAM,
+		LOOP_OR_ONCE_PARAM,
 		CROSSFADE_PARAM,
 		PARAMS_LEN
 	};
 	enum InputId {
-		VOLTAGE_INPUT,
-		RECORD_GATE_INPUT,
-		RESTART_PLAYBACK_INPUT,
-		CLEAR_RECORDING_INPUT,
+		VOLTAGE_IN_INPUT,
+		RECORDING_GATE_INPUT,
+		RESTART_TRIGGER_INPUT,
+		CLEAR_TRIGGER_INPUT,
 		INPUTS_LEN
 	};
 	enum OutputId {
-		VOLTAGE_OUTPUT,
+		VOLTAGE_OUT_OUTPUT,
+		END_OF_CYCLE_TRIGGER_OUTPUT,
 		OUTPUTS_LEN
 	};
 	enum LightId {
-		RECORD_GATE_LIGHT,
+		MONITOR_LIGHT,
+		RECORDING_INDICATOR_LIGHT,
+		END_OF_CYCLE_INDICATOR_LIGHT,
 		LIGHTS_LEN
 	};
 
@@ -41,26 +47,31 @@ struct Tie : Module {
 	// helpers
 	float input = 0.f;
 	float output = 0.f;
-	// false = 0.f = low gate
-	// true = 1.f = high gate
+	// for recordingGateState, false = 0.f = low gate, true = 1.f = high gate
 	bool recordingGateState = false;
+	float gateOrLatch = 0.f;
+	float loopOrOnce = 0.f;
 
 	Tie() {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
 
 		// configure the crossfade length param
 		// todo!
-		configParam(CROSSFADE_PARAM, 0.f, 1.f, 1.f, "Crossfade anti-click length");
+		configButton(MONITOR_PUSH_BUTTON_PARAM, "Monitor push");
+		configSwitch(GATE_OR_LATCH_PARAM, 0.0, 1.0, 1.0, "Gate or Latch", {"Gate", "Latch"});
+		configSwitch(LOOP_OR_ONCE_PARAM, 0.0, 1.0, 1.0, "Loop or Once", {"Loop", "Once"});
+		configParam(CROSSFADE_PARAM, 0.f, 1.f, 0.f, "Crossfade anti-click length");
+
 
 		// configure the tooltip labels on the front panel
-		configInput(VOLTAGE_INPUT, "Voltage");
-		configInput(RECORD_GATE_INPUT, "Recording gate");
-		configInput(RESTART_PLAYBACK_INPUT, "Restart playback trigger");
-		configInput(CLEAR_RECORDING_INPUT, "Clear recording trigger");
-		configOutput(VOLTAGE_OUTPUT, "Voltage");
+		configInput(VOLTAGE_IN_INPUT, "Voltage");
+		configInput(RECORDING_GATE_INPUT, "Recording gate");
+		configInput(RESTART_TRIGGER_INPUT, "Restart playback trigger");
+		configInput(CLEAR_TRIGGER_INPUT, "Clear recording trigger");
+		configOutput(VOLTAGE_OUT_OUTPUT, "Voltage");
 
 		// configure the bypass route (only one)
-		configBypass(VOLTAGE_INPUT, VOLTAGE_OUTPUT);
+		configBypass(VOLTAGE_IN_INPUT, VOLTAGE_OUT_OUTPUT);
 
 		// fill the recording buffer with zeros, just to be sure
 		std::fill(std::begin(buffer), std::end(buffer), 0);
@@ -71,34 +82,37 @@ struct Tie : Module {
 
 	void process(const ProcessArgs& args) override {
 		// clear the recording buffer when a trigger arrives
-		if (clearRecordingTrigger.process(inputs[CLEAR_RECORDING_INPUT].getVoltage())) {
+		if (clearRecordingTrigger.process(inputs[CLEAR_TRIGGER_INPUT].getVoltage())) {
 			// immediately fill the recording buffer with zeros
 			std::fill(std::begin(buffer), std::end(buffer), 0);
 		}
 
 		// restart the playback of the recording buffer when a trigger arrives (resets the buffer position to zero)
-		if (restartPlaybackTrigger.process(inputs[RESTART_PLAYBACK_INPUT].getVoltage())) {
+		if (restartPlaybackTrigger.process(inputs[RESTART_TRIGGER_INPUT].getVoltage())) {
 			bufferPosition = 0;
 		}
 
 		// get the input voltage
-		input = inputs[VOLTAGE_INPUT].getVoltage();
+		input = inputs[VOLTAGE_IN_INPUT].getVoltage();
 
+		// get the state of the gate or latch switch
+		gateOrLatch = params[GATE_OR_LATCH_PARAM].getValue();
 		// set the recording gate state
-		recordingGateState = inputs[RECORD_GATE_INPUT].getVoltage() > 0.f;
+		// if gateOrLatch is set to latch, the gate is always open, otherwise, go off the gate input
+		recordingGateState = (gateOrLatch) ? inputs[RECORDING_GATE_INPUT].getVoltage() > 0.f : true;
 
 		// get the crossfade amount from the slew limiter based on the state of the recording gate
 		crossfadeAmount = crossfadeSlewLimiter.process(args.sampleTime, recordingGateState);
 
 		// set the recording light's brightness
-		lights[RECORD_GATE_LIGHT].setBrightness(recordingGateState);
+		lights[RECORDING_INDICATOR_LIGHT].setBrightness(recordingGateState);
 
 		// set the value of the current sample
 		// note: output is redundant, but keeping in case needed later
 		output = buffer[bufferPosition] + (input * crossfadeAmount);
 
 		// set the output voltage
-		outputs[VOLTAGE_OUTPUT].setVoltage(output);
+		outputs[VOLTAGE_OUT_OUTPUT].setVoltage(output);
 
 		// add the current sample to the recording buffer at the current position
 		buffer[bufferPosition] = output;
@@ -125,25 +139,29 @@ struct TieWidget : ModuleWidget {
 		addChild(createWidget<ScrewBlack>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
 		// params
-		addParam(createParamCentered<CHMRoundLargeKnob>(mm2px(Vec(12.7, 82.701)), module, Tie::CROSSFADE_PARAM));
-
-		// lights
-		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(19.315, 31.188)), module, Tie::RECORD_GATE_LIGHT));
+		// monitor toggle button
+		// addChild(createWidgetCentered<Widget>(mm2px(Vec(22.86, 20.32))));
+		addParam(createLightParamCentered<VCVLightBezel<>>(mm2px(Vec(22.86, 20.32)), module, Tie::MONITOR_PUSH_BUTTON_PARAM, Tie::MONITOR_LIGHT));
+		// gate or latch switch
+		addParam(createParamCentered<CKSS>(mm2px(Vec(22.86, 40.64)), module, Tie::GATE_OR_LATCH_PARAM));
+		// loop or once switch
+		addParam(createParamCentered<CKSS>(mm2px(Vec(22.86, 63.504)), module, Tie::LOOP_OR_ONCE_PARAM));
+		// crossfade param
+		addParam(createParamCentered<CHMRoundMediumKnob>(mm2px(Vec(22.86, 84.192)), module, Tie::CROSSFADE_PARAM));
 
 		// inputs
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, 16.555)), module, Tie::VOLTAGE_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, 31.188)), module, Tie::RECORD_GATE_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(6.085, 68.413)), module, Tie::RESTART_PLAYBACK_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(19.315, 68.413)), module, Tie::CLEAR_RECORDING_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.62, 20.32)), module, Tie::VOLTAGE_IN_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.62, 40.64)), module, Tie::RECORDING_GATE_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.62, 63.504)), module, Tie::RESTART_TRIGGER_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.62, 84.192)), module, Tie::CLEAR_TRIGGER_INPUT));
 
 		// outputs
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, 100.499)), module, Tie::VOLTAGE_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(7.62, 100.499)), module, Tie::VOLTAGE_OUT_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(22.86, 100.499)), module, Tie::END_OF_CYCLE_TRIGGER_OUTPUT));
 
-		// shake it all about puts
-		// gate or latch switch
-		addChild(createWidgetCentered<Widget>(mm2px(Vec(12.7, 41.772))));
-		// loop or once switch
-		addChild(createWidgetCentered<Widget>(mm2px(Vec(12.7, 52.355))));
+		// lights
+		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(7.62, 47.566)), module, Tie::RECORDING_INDICATOR_LIGHT));
+		addChild(createLightCentered<SmallLight<BlueLight>>(mm2px(Vec(22.86, 107.425)), module, Tie::END_OF_CYCLE_INDICATOR_LIGHT));
 
 	}
 };
