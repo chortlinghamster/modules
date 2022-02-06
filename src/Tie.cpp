@@ -31,6 +31,7 @@ struct Tie : Module {
 	dsp::SchmittTrigger restartPlaybackTrigger;
 	dsp::SchmittTrigger clearRecordingTrigger;
 	dsp::SlewLimiter crossfadeSlewLimiter;
+	dsp::BooleanTrigger monitorButtonTrigger;
 
 	// buffer stuff
 	// 4 seconds at 48 KHz during testing.
@@ -51,6 +52,8 @@ struct Tie : Module {
 	bool recordingGateState = false;
 	float gateOrLatch = 0.f;
 	float loopOrOnce = 0.f;
+	bool monitorButtonState = false;
+	bool monitor = false;
 
 	Tie() {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
@@ -62,7 +65,6 @@ struct Tie : Module {
 		configSwitch(LOOP_OR_ONCE_PARAM, 0.0, 1.0, 1.0, "Loop or Once", {"Loop", "Once"});
 		configParam(CROSSFADE_PARAM, 0.f, 1.f, 0.f, "Crossfade anti-click length");
 
-
 		// configure the tooltip labels on the front panel
 		configInput(VOLTAGE_IN_INPUT, "Voltage");
 		configInput(RECORDING_GATE_INPUT, "Recording gate");
@@ -73,7 +75,7 @@ struct Tie : Module {
 		// configure the bypass route (only one)
 		configBypass(VOLTAGE_IN_INPUT, VOLTAGE_OUT_OUTPUT);
 
-		// fill the recording buffer with zeros, just to be sure
+		// zero out the recording buffer, just in case
 		std::fill(std::begin(buffer), std::end(buffer), 0);
 
 		// set the slew limiter rise and fall speed
@@ -83,7 +85,6 @@ struct Tie : Module {
 	void process(const ProcessArgs& args) override {
 		// clear the recording buffer when a trigger arrives
 		if (clearRecordingTrigger.process(inputs[CLEAR_TRIGGER_INPUT].getVoltage())) {
-			// immediately fill the recording buffer with zeros
 			std::fill(std::begin(buffer), std::end(buffer), 0);
 		}
 
@@ -97,8 +98,10 @@ struct Tie : Module {
 
 		// get the state of the gate or latch switch
 		gateOrLatch = params[GATE_OR_LATCH_PARAM].getValue();
+
 		// set the recording gate state
-		// if gateOrLatch is set to latch, the gate is always open, otherwise, go off the gate input
+		// if gateOrLatch is set to latch (1.f) the gate is always open
+		// otherwise, go off the gate input voltage level
 		recordingGateState = (gateOrLatch) ? inputs[RECORDING_GATE_INPUT].getVoltage() > 0.f : true;
 
 		// get the crossfade amount from the slew limiter based on the state of the recording gate
@@ -108,14 +111,31 @@ struct Tie : Module {
 		lights[RECORDING_INDICATOR_LIGHT].setBrightness(recordingGateState);
 
 		// set the value of the current sample
-		// note: output is redundant, but keeping in case needed later
 		output = buffer[bufferPosition] + (input * crossfadeAmount);
-
-		// set the output voltage
-		outputs[VOLTAGE_OUT_OUTPUT].setVoltage(output);
 
 		// add the current sample to the recording buffer at the current position
 		buffer[bufferPosition] = output;
+
+		// monitor button stuff
+		monitorButtonState = params[MONITOR_PUSH_BUTTON_PARAM].getValue() > 0.f;
+		if (monitorButtonTrigger.process(monitorButtonState)) {
+			monitor = !monitor;
+		}
+		lights[MONITOR_LIGHT].setBrightness(monitor);
+
+		// // however, and this is kludgy, turn the monitor off when the recording gate is high
+		// if (recordingGateState) {
+		// 	params[MONITOR_PUSH_BUTTON_PARAM].setValue(0.f);
+		// 	monitor = false;
+		// }
+
+		// if monitor is true and the recording gate is NOT high, mix the incoming voltage into the output voltage otherwise weird phasing stuff
+		if (monitor && !recordingGateState) {
+			output += input;
+		}
+
+		// set the output voltage
+		outputs[VOLTAGE_OUT_OUTPUT].setVoltage(output);
 
 		// increment the buffer position
 		bufferPosition++;
@@ -140,8 +160,7 @@ struct TieWidget : ModuleWidget {
 
 		// params
 		// monitor toggle button
-		// addChild(createWidgetCentered<Widget>(mm2px(Vec(22.86, 20.32))));
-		addParam(createLightParamCentered<VCVLightBezel<>>(mm2px(Vec(22.86, 20.32)), module, Tie::MONITOR_PUSH_BUTTON_PARAM, Tie::MONITOR_LIGHT));
+		addParam(createLightParamCentered<VCVLightBezel<RedLight>>(mm2px(Vec(22.86, 20.32)), module, Tie::MONITOR_PUSH_BUTTON_PARAM, Tie::MONITOR_LIGHT));
 		// gate or latch switch
 		addParam(createParamCentered<CKSS>(mm2px(Vec(22.86, 40.64)), module, Tie::GATE_OR_LATCH_PARAM));
 		// loop or once switch
