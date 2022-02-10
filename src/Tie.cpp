@@ -17,7 +17,7 @@ struct Tie : Module {
 	};
 	enum OutputId {
 		VOLTAGE_OUT_OUTPUT,
-		END_OF_CYCLE_TRIGGER_OUTPUT,
+		END_OF_CYCLE_PULSE_OUTPUT,
 		OUTPUTS_LEN
 	};
 	enum LightId {
@@ -32,6 +32,8 @@ struct Tie : Module {
 	dsp::SchmittTrigger clearRecordingTrigger;
 	dsp::SlewLimiter crossfadeSlewLimiter;
 	dsp::BooleanTrigger monitorButtonTrigger;
+	dsp::PulseGenerator endOfCyclePulseGenerator;
+	dsp::PulseGenerator endOfCycleIndicatorLightPulseGenerator;
 
 	// buffer stuff
 	// 4 seconds at 48 KHz during testing.
@@ -54,6 +56,7 @@ struct Tie : Module {
 	float loopOrOnce = 0.f;
 	bool monitorButtonState = false;
 	bool monitor = false;
+	bool endOfCyclePulse = false;
 
 	Tie() {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
@@ -134,15 +137,24 @@ struct Tie : Module {
 			output += input;
 		}
 
-		// set the output voltage
-		outputs[VOLTAGE_OUT_OUTPUT].setVoltage(output);
-
 		// increment the buffer position
 		bufferPosition++;
 		// reset the buffer position to zero if needed
 		if (bufferPosition >= bufferSize) {
 			bufferPosition = 0;
+			endOfCyclePulseGenerator.trigger(1e-3f);
+			endOfCycleIndicatorLightPulseGenerator.trigger(1e-1f);
 		}
+
+		// end of cycle
+		endOfCyclePulse = endOfCyclePulseGenerator.process(args.sampleTime);
+
+		// set the end of cycle pulse output
+		outputs[END_OF_CYCLE_PULSE_OUTPUT].setVoltage(endOfCyclePulse ? 10.f : 0.f);
+		lights[END_OF_CYCLE_INDICATOR_LIGHT].setBrightness(endOfCycleIndicatorLightPulseGenerator.process(args.sampleTime));
+
+		// set the output voltage
+		outputs[VOLTAGE_OUT_OUTPUT].setVoltage(output);
 	}
 };
 
@@ -176,7 +188,7 @@ struct TieWidget : ModuleWidget {
 
 		// outputs
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(7.62, 100.499)), module, Tie::VOLTAGE_OUT_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(22.86, 100.499)), module, Tie::END_OF_CYCLE_TRIGGER_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(22.86, 100.499)), module, Tie::END_OF_CYCLE_PULSE_OUTPUT));
 
 		// lights
 		addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec(7.62, 47.566)), module, Tie::RECORDING_INDICATOR_LIGHT));
