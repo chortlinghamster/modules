@@ -62,18 +62,21 @@ struct Tie : Module {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
 
 		// configure the crossfade length param
-		// todo!
-		configButton(MONITOR_PUSH_BUTTON_PARAM, "Monitor push");
-		configSwitch(GATE_OR_LATCH_PARAM, 0.0, 1.0, 1.0, "Gate or Latch", {"Gate", "Latch"});
-		configSwitch(LOOP_OR_ONCE_PARAM, 0.0, 1.0, 1.0, "Loop or Once", {"Loop", "Once"});
 		configParam(CROSSFADE_PARAM, 0.f, 1.f, 0.f, "Crossfade anti-click length");
+		// configure the monintor button
+		configButton(MONITOR_PUSH_BUTTON_PARAM, "Monitor toggle push button");
+		// configure the switches
+		// note that the switch positions are in "reverse order" due to the design of the front panel
+		configSwitch(GATE_OR_LATCH_PARAM, 0, 1, 1, "Gate or latch mode switch", {"Latch", "Gate"});
+		configSwitch(LOOP_OR_ONCE_PARAM, 0, 1, 1, "Loop or once mode switch", {"Once", "Loop"});
 
-		// configure the tooltip labels on the front panel
+		// configure the tooltip labels
 		configInput(VOLTAGE_IN_INPUT, "Voltage");
 		configInput(RECORDING_GATE_INPUT, "Recording gate");
 		configInput(RESTART_TRIGGER_INPUT, "Restart playback trigger");
 		configInput(CLEAR_TRIGGER_INPUT, "Clear recording trigger");
 		configOutput(VOLTAGE_OUT_OUTPUT, "Voltage");
+		configOutput(END_OF_CYCLE_PULSE_OUTPUT, "End of cycle pulse");
 
 		// configure the bypass route (only one)
 		configBypass(VOLTAGE_IN_INPUT, VOLTAGE_OUT_OUTPUT);
